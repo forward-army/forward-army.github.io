@@ -108,10 +108,10 @@ export const comparisons = [
     name: 'Viktor',
     vendor: 'viktor.com',
     tagline:
-      'Viktor is a self-serve AI colleague on its own cloud. forward.army is an automated forward-deployed engineer — model-agnostic, running inside your infrastructure, backed by human engineers.',
+      'Viktor is one general-purpose AI colleague on its own cloud. forward.army is the platform a level above it — it engineers a purpose-built agent for each of your use cases and runs them inside your infrastructure, backed by human engineers.',
     intro:
-      'Viktor is an AI colleague you install into Slack or Teams to execute tasks end-to-end from its own cloud. forward.army takes the forward-deployed route: an automated engineer that uses many models as tools, runs in your infrastructure (or a dedicated isolated account), stays under scoped access and approvals, and is backed by human forward-deployed engineers.',
-    note: null,
+      'Viktor is an AI colleague you install into Slack or Teams to execute tasks end-to-end from its own cloud. forward.army is not a competing colleague — it is the platform and operating team that builds the right agent for each job: purpose-built per use case, deterministic where it counts, run in your infrastructure (or a dedicated isolated account), and held to scoped access and approvals.',
+    note: 'In fact, you could build a Viktor-style colleague on forward.army — for one of your use cases, on your own infrastructure, engineered and testable rather than left entirely to a model. Viktor is one product; forward.army is the platform and operator behind purpose-built agents.',
     rows: [
       {
         k: 'Where it runs',
