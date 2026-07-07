@@ -203,6 +203,11 @@
   [data-loop].in-view .loop-fill {
     transform: scaleX(1);
   }
+
+  /* FAQ disclosure: chevron points down when the answer is open. */
+  details[open] .faq-chevron {
+    transform: rotate(90deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
