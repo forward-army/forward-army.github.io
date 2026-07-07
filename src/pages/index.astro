@@ -79,10 +79,23 @@ const record = [
   },
 ];
 
+// Ordered alphabetically by surname. Add each LinkedIn URL to show the link.
 const founders = [
-  { name: 'Adrian Szymczak', scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en' },
-  { name: 'Łukasz Augustyniak', scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en' },
-  { name: 'Roman Bartusiak', scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en' },
+  {
+    name: 'Łukasz Augustyniak',
+    scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en',
+    linkedin: '',
+  },
+  {
+    name: 'Roman Bartusiak',
+    scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en',
+    linkedin: '',
+  },
+  {
+    name: 'Adrian Szymczak',
+    scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en',
+    linkedin: '',
+  },
 ];
 
 const vectors = [
@@ -304,16 +317,30 @@ const vectors = [
             {founders.map((f) => (
               <li class="flex flex-col justify-between gap-6 bg-bone-sink p-7">
                 <h3 class="text-h3 font-bold text-ink">{f.name}</h3>
-                <a
-                  href={f.scholar}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="group inline-flex items-center gap-2 text-sm font-semibold text-signal-deep transition-colors hover:text-ink"
-                  aria-label={`${f.name} — Google Scholar publications (opens in a new tab)`}
-                >
-                  <span class="mono-label">Publications</span>
-                  <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-                </a>
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <a
+                    href={f.scholar}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex items-center gap-2 text-sm font-semibold text-signal-deep transition-colors hover:text-ink"
+                    aria-label={`${f.name} — Google Scholar publications (opens in a new tab)`}
+                  >
+                    <span class="mono-label">Publications</span>
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                  </a>
+                  {f.linkedin && (
+                    <a
+                      href={f.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="group inline-flex items-center gap-2 text-sm font-semibold text-signal-deep transition-colors hover:text-ink"
+                      aria-label={`${f.name} — LinkedIn profile (opens in a new tab)`}
+                    >
+                      <span class="mono-label">LinkedIn</span>
+                      <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                    </a>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
