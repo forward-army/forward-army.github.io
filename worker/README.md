@@ -1,43 +1,51 @@
 # forward.army — request-access Worker
 
 A Cloudflare Worker that receives the site's **Request access** form and emails
-the lead. It runs at `forward.army/api/request-access` (same origin as the site,
-so the browser POST needs no CORS), and delivers via [Resend](https://resend.com).
+the lead using **Cloudflare Email Routing** — no third-party mail service. It
+runs at `forward.army/api/request-access` (same origin as the site, so the
+browser POST needs no CORS).
 
-## One-time setup
+## One-time Cloudflare dashboard setup (required)
 
-1. **Resend**: create an account, add and verify the `forward.army` domain
-   (adds DKIM/SPF DNS records in Cloudflare), and create an API key.
+The `send_email` binding delivers to a **verified** destination:
 
-2. **Deploy the Worker** (from this `worker/` directory):
+1. In the `forward.army` zone → **Email → Email Routing**, click **Enable**.
+2. Under **Destination addresses**, add and **verify** `riomus@gmail.com`
+   (Cloudflare emails a confirmation link).
 
-   ```sh
-   npm install -g wrangler        # or: npx wrangler ...
-   npx wrangler login             # authorize your Cloudflare account
-   npx wrangler secret put RESEND_API_KEY   # paste the Resend key
-   npx wrangler deploy
-   ```
+That's it — no API keys, no external accounts.
 
-   The route in `wrangler.toml` (`forward.army/api/*`) makes the Worker intercept
-   those paths before they reach GitHub Pages.
+## Deploy
 
-3. **Verify**:
+```sh
+cd worker
+npm install
+npx wrangler login          # authorize your Cloudflare account (once)
+npx wrangler deploy
+```
 
-   ```sh
-   curl -X POST https://forward.army/api/request-access \
-     -H 'Content-Type: application/json' \
-     -d '{"name":"Test","company":"Acme","email":"t@acme.com","usecase":"hello"}'
-   # → {"ok":true}
-   ```
+The route in `wrangler.toml` (`forward.army/api/*`) makes the Worker intercept
+those paths before they reach GitHub Pages.
+
+## Verify
+
+```sh
+curl -X POST https://forward.army/api/request-access \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Test","company":"Acme","email":"t@acme.com","usecase":"hello"}'
+# → {"ok":true}   (and an email lands in your inbox)
+```
+
+## Config (`wrangler.toml`)
+
+- `send_email` `destination_address` and `[vars] LEAD_TO` — where leads land
+  (must be a verified Email Routing destination).
+- `[vars] LEAD_FROM` — sender address on `forward.army`.
+- Requester's email is set as `Reply-To`, so you can reply straight from your inbox.
 
 ## Behaviour
 
-- Validates required fields + email; drops bot submissions via a honeypot field.
-- On success returns `{"ok":true}` and the site shows its confirmation state.
-- On any failure the site falls back to a `mailto:command@forward.army` link, so
-  the form never dead-ends — even before the Worker is deployed.
-
-## Config
-
-`wrangler.toml [vars]`: `LEAD_TO` (recipient) and `LEAD_FROM` (verified sender).
-Secret `RESEND_API_KEY` is set via `wrangler secret put` (never committed).
+- Validates required fields + email; drops bots via a honeypot field.
+- Success → `{"ok":true}`; the site shows its confirmation state.
+- Any failure → the site falls back to `mailto:command@forward.army`, so the
+  form never dead-ends.

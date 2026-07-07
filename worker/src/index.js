@@ -1,14 +1,16 @@
 /**
  * forward.army — request-access form handler.
  *
- * Receives JSON from the site's form, validates it, and emails the lead via
- * Resend. Deployed at forward.army/api/* so the browser POST is same-origin.
+ * Receives JSON from the site's form, validates it, and emails the lead using
+ * Cloudflare Email Routing (the `send_email` binding) — no third-party service.
+ * Deployed at forward.army/api/* so the browser POST is same-origin.
  *
- * Setup:
- *   cd worker
- *   npx wrangler secret put RESEND_API_KEY   # from https://resend.com (verify forward.army)
- *   npx wrangler deploy
+ * Requires (one-time, in the Cloudflare dashboard for the forward.army zone):
+ *   1. Email Routing enabled.
+ *   2. The LEAD_TO address verified as a destination address.
  */
+import { EmailMessage } from 'cloudflare:email';
+import { createMimeMessage } from 'mimetext';
 
 const CORS = {
   'Access-Control-Allow-Origin': 'https://forward.army',
@@ -22,10 +24,8 @@ const json = (body, status = 200) =>
     headers: { 'Content-Type': 'application/json', ...CORS },
   });
 
-const clean = (v, max = 2000) => String(v ?? '').trim().slice(0, max);
+const clean = (v, max = 4000) => String(v ?? '').trim().slice(0, max);
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-const esc = (s) =>
-  s.replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 
 export default {
   async fetch(request, env) {
@@ -44,7 +44,7 @@ export default {
     }
 
     // Bot honeypot: real users never fill "website".
-    if (clean(data.website)) return json({ ok: true });
+    if (clean(data.website, 100)) return json({ ok: true });
 
     const name = clean(data.name, 200);
     const company = clean(data.company, 200);
@@ -55,37 +55,32 @@ export default {
       return json({ ok: false, error: 'Missing or invalid fields' }, 422);
     }
 
-    if (!env.RESEND_API_KEY) {
-      // Misconfigured deploy — fail loudly so the form shows its fallback.
-      return json({ ok: false, error: 'Mailer not configured' }, 500);
-    }
+    const body = [
+      'New deployment request',
+      '',
+      `Name:    ${name}`,
+      `Company: ${company}`,
+      `Email:   ${email}`,
+      '',
+      'Would deploy an agent on:',
+      usecase,
+      '',
+    ].join('\n');
 
-    const text = `New deployment request\n\nName:    ${name}\nCompany: ${company}\nEmail:   ${email}\n\nWould deploy an agent on:\n${usecase}\n`;
-    const html = `<h2>New deployment request</h2>
-<p><strong>Name:</strong> ${esc(name)}<br>
-<strong>Company:</strong> ${esc(company)}<br>
-<strong>Email:</strong> ${esc(email)}</p>
-<p><strong>Would deploy an agent on:</strong><br>${esc(usecase).replace(/\n/g, '<br>')}</p>`;
+    const msg = createMimeMessage();
+    msg.setSender({ name: 'forward.army', addr: env.LEAD_FROM });
+    msg.setRecipient(env.LEAD_TO);
+    msg.setSubject(`Deployment request — ${company}`);
+    msg.setHeader('Reply-To', email);
+    msg.addMessage({ contentType: 'text/plain', data: body });
 
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: env.LEAD_FROM,
-        to: [env.LEAD_TO],
-        reply_to: email,
-        subject: `Deployment request — ${company}`,
-        text,
-        html,
-      }),
-    });
-
-    if (!res.ok) {
+    try {
+      const message = new EmailMessage(env.LEAD_FROM, env.LEAD_TO, msg.asRaw());
+      await env.LEADS.send(message);
+    } catch (err) {
       return json({ ok: false, error: 'Delivery failed' }, 502);
     }
+
     return json({ ok: true });
   },
 };

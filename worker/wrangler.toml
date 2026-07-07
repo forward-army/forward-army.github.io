@@ -1,18 +1,21 @@
-# Cloudflare Worker that receives the "Request access" form and emails the lead.
-# Same-origin with the site: it intercepts forward.army/api/* before Pages.
+# Cloudflare Worker that receives the "Request access" form and emails the lead
+# using Cloudflare Email Routing (no third-party mail service).
+# It runs at forward.army/api/* — same origin as the site (no CORS needed).
 name = "forward-army-forms"
 main = "src/index.js"
 compatibility_date = "2024-11-01"
 
-# Serve at the site's own domain so the browser POST is same-origin (no CORS).
+# Intercept these paths before they reach GitHub Pages.
 routes = [
   { pattern = "forward.army/api/*", zone_name = "forward.army" }
 ]
 
-[vars]
-# Where leads are delivered, and the verified sender (must be on forward.army).
-LEAD_TO = "command@forward.army"
-LEAD_FROM = "forward.army <noreply@forward.army>"
+# Email Routing send binding. destination_address MUST be a verified
+# destination in the zone's Email Routing settings.
+send_email = [
+  { name = "LEADS", destination_address = "riomus@gmail.com" }
+]
 
-# Secret (do NOT put here) — set with:
-#   cd worker && npx wrangler secret put RESEND_API_KEY
+[vars]
+LEAD_TO = "riomus@gmail.com"       # where leads land (change to taste)
+LEAD_FROM = "form@forward.army"    # sender, on your domain

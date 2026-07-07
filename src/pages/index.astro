@@ -4,10 +4,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Chevron from '../components/Chevron.astro';
 
-// Set these in one place. BOOKING_URL falls back to scrolling to the form.
-const BOOKING_URL = ''; // e.g. 'https://cal.com/forward-army/briefing'
-const bookingHref = BOOKING_URL || '#request-form';
-
 const loop = [
   {
     idx: '01',
@@ -392,14 +388,6 @@ const vectors = [
             you're comfortable granting — we'll deploy, brief you, and you decide
             what ships.
           </p>
-
-          <a
-            href={bookingHref}
-            class="group mt-8 inline-flex items-center gap-3 border-2 border-ink px-6 py-3.5 font-display text-lg font-bold text-ink transition-colors hover:bg-ink hover:text-bone"
-          >
-            Book a 20-min briefing
-            <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
-          </a>
 
           <ul class="mt-10 space-y-3">
             {[

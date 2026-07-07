@@ -1,0 +1,11 @@
+{
+  "name": "forward-army-forms",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mimetext": "^3.0.24"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
