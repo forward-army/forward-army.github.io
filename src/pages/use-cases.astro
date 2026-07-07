@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Chevron from '../components/Chevron.astro';
-import { usecases } from '../data/usecases.js';
+import { usecaseGroups } from '../data/usecases.js';
 
 const title = 'Use cases — custom agents for an AI-first company';
 const description =
@@ -41,30 +41,38 @@ const description =
 
     <!-- ============================ CATALOG ========================== -->
     <section aria-label="Use cases" class="bg-bone">
-      <div class="brief-shell py-8 sm:py-12">
-        <ol>
-          {usecases.map((u, i) => (
-            <li class="reveal grid gap-x-12 gap-y-5 border-b border-[var(--edge-strong)] py-12 md:grid-cols-[0.9fr_1.1fr] md:items-start">
-              <div>
-                <div class="flex items-baseline gap-3">
-                  <span class="font-mono text-sm font-medium text-signal-deep">{`0${i + 1}`}</span>
-                  <h2 class="font-display text-h3 font-bold text-ink">{u.t}</h2>
-                </div>
-                <ul class="mt-5 flex flex-wrap gap-2" aria-label="Connects to">
-                  {u.connects.map((tag) => (
-                    <li class="mono-label border border-[var(--edge-strong)] px-2.5 py-1 text-field">{tag}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p class="font-display text-lg font-bold text-signal-deep">{u.lede}</p>
-                <p class="mt-3 text-field">{u.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+      <div class="brief-shell py-16 sm:py-20">
+        {usecaseGroups.map((g, gi) => (
+          <div class={gi > 0 ? 'mt-20' : ''}>
+            <h2 class="reveal mono-label text-signal-deep">{g.group}</h2>
+            <ol>
+              {g.items.map((u, i) => {
+                const n = usecaseGroups.slice(0, gi).reduce((s, x) => s + x.items.length, 0) + i + 1;
+                return (
+                  <li class="reveal grid gap-x-12 gap-y-5 border-b border-[var(--edge-strong)] py-11 first:border-t first:mt-6 md:grid-cols-[0.9fr_1.1fr] md:items-start">
+                    <div>
+                      <div class="flex items-baseline gap-3">
+                        <span class="font-mono text-sm font-medium text-signal-deep">{String(n).padStart(2, '0')}</span>
+                        <h3 class="font-display text-h3 font-bold text-ink">{u.t}</h3>
+                      </div>
+                      <ul class="mt-5 flex flex-wrap gap-2" aria-label="Connects to">
+                        {u.connects.map((tag) => (
+                          <li class="mono-label border border-[var(--edge-strong)] px-2.5 py-1 text-field">{tag}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p class="font-display text-lg font-bold text-signal-deep">{u.lede}</p>
+                      <p class="mt-3 text-field">{u.body}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        ))}
 
-        <p class="reveal mt-12 max-w-2xl text-lead text-field">
+        <p class="reveal mt-14 max-w-2xl text-lead text-field">
           Don't see yours? That's the point — every forward agent is developed
           for your context. <span class="text-ink">Bring the job.</span>
         </p>

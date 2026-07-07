@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Chevron from '../../components/Chevron.astro';
-import { comparisons } from '../../data/comparisons.js';
+import { comparisons, positioning } from '../../data/comparisons.js';
 
 export function getStaticPaths() {
   return comparisons.map((c) => ({ params: { slug: c.slug }, props: { c } }));
@@ -34,6 +34,7 @@ const others = comparisons.filter((x) => x.slug !== c.slug);
         </h1>
         <p class="mt-8 max-w-2xl text-lead font-semibold text-chalk">{c.tagline}</p>
         <p class="mt-5 max-w-2xl text-base leading-relaxed text-field-soft">{c.intro}</p>
+        <p class="mt-8 max-w-2xl border-l-2 border-signal pl-5 text-base text-chalk">{positioning}</p>
       </div>
     </section>
 

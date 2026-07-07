@@ -4,20 +4,24 @@
  * into your systems, vs. capable tools/platforms you self-operate. No false or
  * disparaging claims — competitor cells state their real, public model.
  */
+// Shown on every comparison page. forward.army isn't a rival model — it uses them.
+export const positioning =
+  'forward.army is an automated forward-deployed engineer. It uses ChatGPT, Claude, and many other models as tools — so this is not a contest of models. It is the operating layer around them: your infrastructure, scoped access, guardrails, PRs, and a human in command.';
+
 export const comparisons = [
   {
     slug: 'chatgpt',
     name: 'ChatGPT',
     vendor: 'OpenAI',
     tagline:
-      'ChatGPT is a tool you operate. forward.army is an operator that runs agents inside your systems — under your command.',
+      'ChatGPT is a tool you operate. forward.army is an automated forward-deployed engineer that uses ChatGPT — and other models — as tools, and runs the whole job inside your systems, under your command.',
     intro:
-      'ChatGPT — with Operator, custom GPTs, and the API — is a powerful general assistant you point at problems and drive yourself. forward.army is a forward-deployed operator: we deploy governed agents into your business, run them under scoped access, and ship the work — so adoption never hinges on your team learning to prompt.',
+      'ChatGPT — with Operator, custom GPTs, and the API — is a powerful general assistant you point at problems and drive yourself. forward.army is the engineer, not the tool: an automated forward-deployed engineer that uses models like GPT under the hood, deploys into your business under scoped access, and ships the work — so adoption never hinges on your team learning to prompt.',
     note: null,
     rows: [
       {
         k: 'Where it runs',
-        us: 'Your infrastructure, or a dedicated isolated account — your data can stay in your walls',
+        us: 'Your infrastructure — up to fully on-premise with the models running locally — or a dedicated isolated account',
         them: "OpenAI's cloud (Enterprise adds data controls)",
       },
       {
@@ -52,14 +56,14 @@ export const comparisons = [
     name: 'Claude',
     vendor: 'Anthropic',
     tagline:
-      'Anthropic gives you frontier models and the SDK to build agents. forward.army deploys, governs, and operates them inside your business.',
+      'Anthropic gives you the models and the SDK. forward.army is an automated forward-deployed engineer that uses them — Claude among many — to do the work inside your business, governed and shipped.',
     intro:
-      'Anthropic ships some of the best models in the world plus the tools to build with them — Claude, Claude Code, the Agent SDK, MCP. That is raw capability you assemble and run yourself. forward.army is the operating layer on top: we forward-deploy governed agents, wire the access, enforce guardrails, and ship the work as PRs.',
-    note: 'forward.army is model-agnostic and often runs on frontier models like Claude — this is less "us vs them" than raw capability vs a governed operator built around it.',
+      'Anthropic ships some of the best models in the world plus the tools to build with them — Claude, Claude Code, the Agent SDK, MCP. That is raw capability you assemble and run yourself. forward.army is the engineer built on top: an automated forward-deployed engineer that uses Claude (and other models) as tools, wires the access, enforces guardrails, and ships the work as PRs.',
+    note: 'forward.army is model-agnostic and routinely runs on frontier models like Claude — so this is less "us vs them" than raw models vs an automated engineer that uses them.',
     rows: [
       {
         k: 'Where it runs',
-        us: 'Your infrastructure, or a dedicated isolated account',
+        us: 'Your infrastructure — up to fully on-premise with the models running locally — or a dedicated isolated account',
         them: "Anthropic's cloud, or your cloud via API",
       },
       {
@@ -94,14 +98,14 @@ export const comparisons = [
     name: 'Viktor',
     vendor: 'viktor.com',
     tagline:
-      'Viktor is a self-serve AI colleague in Slack. forward.army is a forward-deployed operator that runs governed agents inside your infrastructure, backed by human engineers.',
+      'Viktor is a self-serve AI colleague on its own cloud. forward.army is an automated forward-deployed engineer — model-agnostic, running inside your infrastructure, backed by human engineers.',
     intro:
-      'Viktor is an AI colleague you install into Slack or Teams to execute tasks end-to-end from its own cloud. forward.army takes the forward-deployed route: governed agents that run in your infrastructure (or a dedicated isolated account), held to scoped access and approvals, and backed by human forward-deployed engineers.',
+      'Viktor is an AI colleague you install into Slack or Teams to execute tasks end-to-end from its own cloud. forward.army takes the forward-deployed route: an automated engineer that uses many models as tools, runs in your infrastructure (or a dedicated isolated account), stays under scoped access and approvals, and is backed by human forward-deployed engineers.',
     note: null,
     rows: [
       {
         k: 'Where it runs',
-        us: 'Your infrastructure — your data can stay in your walls — or a dedicated isolated account',
+        us: 'Your infrastructure — up to fully on-premise with the models running locally — or a dedicated isolated account',
         them: "Viktor's cloud (isolated compute per user)",
       },
       {
