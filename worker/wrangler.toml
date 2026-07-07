@@ -13,9 +13,9 @@ routes = [
 # Email Routing send binding. destination_address MUST be a verified
 # destination in the zone's Email Routing settings.
 send_email = [
-  { name = "LEADS", destination_address = "riomus@gmail.com" }
+  { name = "LEADS", destination_address = "roman.bartusiak@gmail.com" }
 ]
 
 [vars]
-LEAD_TO = "riomus@gmail.com"       # where leads land (change to taste)
-LEAD_FROM = "form@forward.army"    # sender, on your domain
+LEAD_TO = "roman.bartusiak@gmail.com"   # where leads land (verified destination)
+LEAD_FROM = "form@forward.army"         # sender, on your domain

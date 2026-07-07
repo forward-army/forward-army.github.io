@@ -2,15 +2,14 @@
  * forward.army — request-access form handler.
  *
  * Receives JSON from the site's form, validates it, and emails the lead using
- * Cloudflare Email Routing (the `send_email` binding) — no third-party service.
- * Deployed at forward.army/api/* so the browser POST is same-origin.
+ * Cloudflare Email Routing (the `send_email` binding) — no third-party service,
+ * no dependencies. Deployed at forward.army/api/* so the POST is same-origin.
  *
- * Requires (one-time, in the Cloudflare dashboard for the forward.army zone):
+ * Requires (one-time, Cloudflare dashboard, forward.army zone):
  *   1. Email Routing enabled.
- *   2. The LEAD_TO address verified as a destination address.
+ *   2. LEAD_TO verified as a destination address.
  */
 import { EmailMessage } from 'cloudflare:email';
-import { createMimeMessage } from 'mimetext';
 
 const CORS = {
   'Access-Control-Allow-Origin': 'https://forward.army',
@@ -27,8 +26,22 @@ const json = (body, status = 200) =>
 const clean = (v, max = 4000) => String(v ?? '').trim().slice(0, max);
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
+// Base64 of a UTF-8 string (Workers have btoa but not Buffer).
+const b64 = (str) => {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  const CH = 0x8000;
+  for (let i = 0; i < bytes.length; i += CH) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+  }
+  return btoa(bin);
+};
+
+// RFC 2047-encode a header value only when it contains non-ASCII.
+const encHeader = (s) => (/[^\x00-\x7F]/.test(s) ? `=?UTF-8?B?${b64(s)}?=` : s);
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
@@ -55,7 +68,7 @@ export default {
       return json({ ok: false, error: 'Missing or invalid fields' }, 422);
     }
 
-    const body = [
+    const text = [
       'New deployment request',
       '',
       `Name:    ${name}`,
@@ -67,18 +80,43 @@ export default {
       '',
     ].join('\n');
 
-    const msg = createMimeMessage();
-    msg.setSender({ name: 'forward.army', addr: env.LEAD_FROM });
-    msg.setRecipient(env.LEAD_TO);
-    msg.setSubject(`Deployment request — ${company}`);
-    msg.setHeader('Reply-To', email);
-    msg.addMessage({ contentType: 'text/plain', data: body });
+    const raw = [
+      `From: ${encHeader('forward.army')} <${env.LEAD_FROM}>`,
+      `To: ${env.LEAD_TO}`,
+      `Reply-To: ${email}`,
+      `Subject: ${encHeader(`Deployment request — ${company}`)}`,
+      `Message-ID: <${crypto.randomUUID()}@forward.army>`,
+      `Date: ${new Date().toUTCString()}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/plain; charset=utf-8',
+      'Content-Transfer-Encoding: base64',
+      '',
+      b64(text).replace(/(.{76})/g, '$1\r\n'),
+    ].join('\r\n');
 
     try {
-      const message = new EmailMessage(env.LEAD_FROM, env.LEAD_TO, msg.asRaw());
-      await env.LEADS.send(message);
+      await env.LEADS.send(new EmailMessage(env.LEAD_FROM, env.LEAD_TO, raw));
     } catch (err) {
       return json({ ok: false, error: 'Delivery failed' }, 502);
+    }
+
+    // Best-effort: also append the lead to a Google Sheet (Apps Script web app).
+    // Email is the source of truth, so a sheet hiccup never fails the request.
+    if (env.SHEET_WEBHOOK_URL) {
+      const append = fetch(env.SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ts: new Date().toISOString(),
+          name,
+          company,
+          email,
+          usecase,
+          token: env.SHEET_TOKEN || undefined,
+        }),
+      }).catch(() => {});
+      if (ctx && ctx.waitUntil) ctx.waitUntil(append);
+      else await append;
     }
 
     return json({ ok: true });
