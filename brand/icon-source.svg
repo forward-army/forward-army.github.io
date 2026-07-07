@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="forward.army">
+  <rect width="64" height="64" rx="12" fill="#141d18"/>
+  <g fill="none" stroke="#f5480c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="14,19 25,32 14,45"/>
+    <polyline points="26,19 37,32 26,45"/>
+    <polyline points="38,19 49,32 38,45"/>
+  </g>
+</svg>

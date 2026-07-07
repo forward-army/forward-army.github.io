@@ -1,0 +1,41 @@
+---
+/**
+ * Chevron — the atom of the brand (DESIGN.md §6).
+ * Forward motion + rank insignia in one shape. Drawn on currentColor so it
+ * inherits text color anywhere: logo mark, list bullet, divider, motion cue.
+ */
+interface Props {
+  count?: 1 | 2 | 3;
+  class?: string;
+  strokeWidth?: number;
+  title?: string;
+}
+const { count = 3, class: klass = '', strokeWidth = 5, title } = Astro.props;
+
+// Right-pointing chevrons, graduated so together they read as one waypoint
+// arrowhead at small sizes and as three rank stripes up close.
+const bars = [
+  { x: 4 },
+  { x: 15 },
+  { x: 26 },
+].slice(3 - count);
+const width = count === 1 ? 15 : count === 2 ? 26 : 40;
+const viewMinX = count === 1 ? 25 : count === 2 ? 14 : 0;
+---
+<svg
+  viewBox={`${viewMinX} 0 ${width} 32`}
+  class={klass}
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  role={title ? 'img' : undefined}
+  aria-hidden={title ? undefined : 'true'}
+  aria-label={title}
+>
+  {title && <title>{title}</title>}
+  {bars.map((b) => (
+    <polyline points={`${b.x},5 ${b.x + 9},16 ${b.x},27`} />
+  ))}
+</svg>

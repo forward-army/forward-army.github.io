@@ -1,0 +1,28 @@
+---
+/**
+ * Logo — chevron mark + wordmark (DESIGN.md §6).
+ * `.army` carries the signal accent: the TLD is the punchline.
+ */
+import Chevron from './Chevron.astro';
+interface Props {
+  class?: string;
+  markOnly?: boolean;
+  /** Accent colour utility for the mark + TLD. Use text-signal on dark bands,
+   *  text-signal-deep on light bands (AA contrast). Defaults to bright signal. */
+  accent?: string;
+}
+const { class: klass = '', markOnly = false, accent = 'text-signal' } = Astro.props;
+---
+<span class={`inline-flex items-center gap-2.5 ${klass}`}>
+  <Chevron
+    count={3}
+    strokeWidth={5}
+    class={`chev-advance h-[0.85em] w-auto ${accent}`}
+    title={markOnly ? 'forward.army' : undefined}
+  />
+  {!markOnly && (
+    <span class="font-display text-[1.15em] font-extrabold tracking-[-0.03em] leading-none">
+      forward<span class={accent}>.army</span>
+    </span>
+  )}
+</span>

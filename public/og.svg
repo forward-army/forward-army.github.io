@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="forward.army — Forward-deployed agents. Under your command.">
+  <rect width="1200" height="630" fill="#141d18"/>
+  <g stroke="#ece7d8" stroke-opacity="0.08" stroke-width="1">
+    <path d="M0 90H1200M0 540H1200"/>
+  </g>
+  <text x="90" y="120" fill="#8a8c7a" font-family="'IBM Plex Mono', monospace" font-size="22" letter-spacing="6">01 / DEPLOYMENT BRIEF · FORWARD.ARMY</text>
+  <g fill="none" stroke="#f5480c" stroke-width="16" stroke-linecap="square">
+    <polyline points="92,210 140,258 92,306"/>
+    <polyline points="150,210 198,258 150,306"/>
+    <polyline points="208,210 256,258 208,306"/>
+  </g>
+  <text x="88" y="430" fill="#ece7d8" font-family="'Bricolage Grotesque', 'Public Sans', sans-serif" font-weight="800" font-size="96" letter-spacing="-3">Forward-deployed agents.</text>
+  <text x="88" y="510" fill="#f5480c" font-family="'Bricolage Grotesque', 'Public Sans', sans-serif" font-weight="800" font-size="72" letter-spacing="-2">Under your command.</text>
+  <text x="90" y="588" fill="#8a8c7a" font-family="'IBM Plex Mono', monospace" font-size="22" letter-spacing="4">CONTROLLED ACCESS · INSPECT · PROPOSE · IMPLEMENT</text>
+</svg>

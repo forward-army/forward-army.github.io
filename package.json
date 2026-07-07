@@ -1,0 +1,37 @@
+{
+  "name": "forward-army",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "forward.army — the forward-deployed agent platform. Marketing site.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "preview:ci": "astro preview --port 4321 --host",
+    "test:a11y": "node scripts/a11y.mjs",
+    "a11y": "start-server-and-test preview:ci http://localhost:4321 test:a11y",
+    "test:lighthouse": "lhci autorun"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.3.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.5",
+    "@fontsource-variable/public-sans": "^5.2.5",
+    "@fontsource/ibm-plex-mono": "^5.2.5",
+    "astro": "^5.6.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@axe-core/puppeteer": "^4.10.0",
+    "@lhci/cli": "^0.14.0",
+    "@tailwindcss/vite": "^4.1.4",
+    "axe-core": "^4.10.0",
+    "puppeteer": "^24.0.0",
+    "start-server-and-test": "^2.0.11",
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3"
+  }
+}

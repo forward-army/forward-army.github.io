@@ -1,0 +1,156 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ * forward.army — design tokens (see DESIGN.md §4, §5)
+ * Tailwind v4 CSS-first theme. Everything traces back to the brief.
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Palette — tinted neutrals, one accent */
+  --color-bone: #f1ece0;
+  --color-bone-sink: #e7e0ce;
+  --color-ink: #141d18;
+  --color-ink-raise: #1d291f;
+  --color-chalk: #ece7d8;
+  --color-field: #5b6152;
+  --color-field-soft: #8a8c7a;
+  --color-signal: #f5480c;
+  /* signal-deep is the accent for SMALL text on light bands; it is intentionally
+     darker than --signal so it clears WCAG AA (4.5:1) on bone and bone-sink. */
+  --color-signal-deep: #b02d00;
+
+  /* Type families */
+  --font-display: 'Bricolage Grotesque Variable', 'Public Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Public Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Fluid display scale — major third, tightened up top (§5) */
+  --text-mono-label: 0.72rem;
+  --text-hero: clamp(2.9rem, 1.4rem + 6.6vw, 7rem);
+  --text-h2: clamp(1.9rem, 1.1rem + 3vw, 3.4rem);
+  --text-h3: clamp(1.3rem, 1rem + 1.2vw, 1.85rem);
+  --text-lead: clamp(1.05rem, 0.95rem + 0.6vw, 1.4rem);
+
+  /* Easing — exponential ease-out only, no bounce (§7) */
+  --ease-brief: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    color-scheme: light;
+    --edge: color-mix(in oklab, var(--color-ink) 12%, transparent);
+    --edge-strong: color-mix(in oklab, var(--color-ink) 22%, transparent);
+    --edge-on-ink: color-mix(in oklab, var(--color-chalk) 15%, transparent);
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bone);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    line-height: 1.55;
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-bone);
+  }
+
+  /* Visible, on-brand focus — accessibility is part of the design (§9) */
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Components / utilities specific to the Deployment Brief system
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* Mono chrome label — section indices, coordinates, tags (§5) */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-label);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* Section frame ticks — the "printed brief" corner marks (§7) */
+  .brief-shell {
+    width: min(100% - 2.5rem, 78rem);
+    margin-inline: auto;
+  }
+
+  /* Staggered entrance — one orchestrated load (§7) */
+  .rise {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: rise 0.9s var(--ease-brief) forwards;
+  }
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Chevron advances forward on hover — the brand motion cue */
+  .chev-advance {
+    transition: transform 0.5s var(--ease-brief);
+  }
+  a:hover .chev-advance,
+  button:hover .chev-advance {
+    transform: translateX(0.28em);
+  }
+
+  /* Hairline grid backdrop for tactical bands */
+  .grid-ticks {
+    background-image:
+      linear-gradient(to right, var(--edge) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--edge) 1px, transparent 1px);
+    background-size: 3.5rem 3.5rem;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 40%, transparent 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

@@ -1,0 +1,38 @@
+---
+import Logo from './Logo.astro';
+import Chevron from './Chevron.astro';
+
+const nav = [
+  { href: '#doctrine', label: 'Doctrine' },
+  { href: '#loop', label: 'The loop' },
+  { href: '#command', label: 'Command' },
+  { href: '#team', label: 'Team' },
+  { href: '#deploy', label: 'Deploy' },
+];
+---
+<header id="top" class="sticky top-0 z-40 border-b border-[var(--edge)] bg-bone/85 backdrop-blur-md">
+  <div class="brief-shell flex h-16 items-center justify-between gap-6">
+    <a href="#top" class="group -m-1 p-1 text-ink" aria-label="forward.army — home">
+      <Logo accent="text-signal-deep" />
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-8 md:flex">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class="mono-label text-field transition-colors hover:text-ink focus-visible:text-ink"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <a
+      href="#deploy"
+      class="group inline-flex items-center gap-2 bg-ink px-4 py-2 text-chalk transition-colors hover:bg-signal hover:text-bone"
+    >
+      <span class="mono-label">Request access</span>
+      <Chevron count={1} strokeWidth={6} class="chev-advance h-[0.7rem] w-auto" />
+    </a>
+  </div>
+</header>

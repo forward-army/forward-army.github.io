@@ -1,0 +1,43 @@
+---
+import Logo from './Logo.astro';
+const year = 2026;
+---
+<footer class="border-t border-[var(--edge-on-ink)] bg-ink text-chalk">
+  <div class="brief-shell grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
+    <div>
+      <a href="#top" class="text-chalk" aria-label="forward.army — home">
+        <Logo />
+      </a>
+      <p class="mt-4 max-w-xs text-sm text-field-soft">
+        The platform for forward-deployed agents. Controlled access, real
+        proposals, shipped work.
+      </p>
+    </div>
+
+    <nav aria-label="Site" class="flex flex-col gap-3">
+      <span class="mono-label text-field-soft">Brief</span>
+      <a href="#doctrine" class="text-sm text-chalk/90 transition-colors hover:text-signal">Doctrine</a>
+      <a href="#loop" class="text-sm text-chalk/90 transition-colors hover:text-signal">The loop</a>
+      <a href="#command" class="text-sm text-chalk/90 transition-colors hover:text-signal">Command &amp; control</a>
+      <a href="#team" class="text-sm text-chalk/90 transition-colors hover:text-signal">Service record</a>
+      <a href="#deploy" class="text-sm text-chalk/90 transition-colors hover:text-signal">Request access</a>
+    </nav>
+
+    <div class="flex flex-col gap-3">
+      <span class="mono-label text-field-soft">Contact</span>
+      <a
+        href="mailto:command@forward.army"
+        class="text-sm text-chalk/90 transition-colors hover:text-signal"
+      >command@forward.army</a>
+      <span class="mono-label mt-4 text-field-soft">Coordinates</span>
+      <span class="font-mono text-xs text-field-soft">52.2297° N&nbsp;&nbsp;21.0122° E</span>
+    </div>
+  </div>
+
+  <div class="border-t border-[var(--edge-on-ink)]">
+    <div class="brief-shell flex flex-col items-start justify-between gap-2 py-5 sm:flex-row sm:items-center">
+      <span class="mono-label text-field-soft">© {year} forward.army — all units accounted for</span>
+      <span class="mono-label text-field-soft">Built by AI &amp; software professionals</span>
+    </div>
+  </div>
+</footer>
