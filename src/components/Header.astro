@@ -7,7 +7,6 @@ const nav = [
   { href: '#loop', label: 'The loop' },
   { href: '#command', label: 'Command' },
   { href: '#team', label: 'Team' },
-  { href: '#deploy', label: 'Deploy' },
 ];
 ---
 <header id="top" class="sticky top-0 z-40 border-b border-[var(--edge)] bg-bone/85 backdrop-blur-md">
@@ -27,12 +26,47 @@ const nav = [
       ))}
     </nav>
 
-    <a
-      href="#deploy"
-      class="group inline-flex items-center gap-2 bg-ink px-4 py-2 text-chalk transition-colors hover:bg-signal hover:text-bone"
-    >
-      <span class="mono-label">Request access</span>
-      <Chevron count={1} strokeWidth={6} class="chev-advance h-[0.7rem] w-auto" />
-    </a>
+    <div class="flex items-center gap-3">
+      <a
+        href="#request-form"
+        class="group inline-flex items-center gap-2 bg-ink px-4 py-2 text-chalk transition-colors hover:bg-signal hover:text-bone"
+      >
+        <span class="mono-label">Request access</span>
+        <Chevron count={1} strokeWidth={6} class="chev-advance h-[0.7rem] w-auto" />
+      </a>
+
+      <!-- Mobile section menu — native <details>, no JS, keyboard-accessible -->
+      <details class="relative md:hidden [&_.bar]:open:opacity-0">
+        <summary
+          class="flex h-9 w-9 cursor-pointer list-none items-center justify-center text-ink [&::-webkit-details-marker]:hidden"
+          aria-label="Open section menu"
+        >
+          <span class="relative block h-3 w-5" aria-hidden="true">
+            <span class="bar absolute left-0 top-0 h-0.5 w-5 bg-ink transition-opacity"></span>
+            <span class="absolute left-0 top-1/2 h-0.5 w-5 -translate-y-1/2 bg-ink"></span>
+            <span class="bar absolute bottom-0 left-0 h-0.5 w-5 bg-ink transition-opacity"></span>
+          </span>
+        </summary>
+        <nav
+          aria-label="Sections"
+          class="absolute right-0 top-11 z-50 w-52 border border-[var(--edge-strong)] bg-bone p-2 shadow-[0_12px_40px_-12px_rgba(20,29,24,0.35)]"
+        >
+          {nav.map((item) => (
+            <a
+              href={item.href}
+              class="block px-3 py-2.5 mono-label text-field transition-colors hover:bg-bone-sink hover:text-ink"
+            >
+              {item.label}
+            </a>
+          ))}
+          <a
+            href="#request-form"
+            class="mt-1 block bg-ink px-3 py-2.5 mono-label text-chalk transition-colors hover:bg-signal hover:text-bone"
+          >
+            Request access
+          </a>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>

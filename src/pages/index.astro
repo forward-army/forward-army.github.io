@@ -4,6 +4,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Chevron from '../components/Chevron.astro';
 
+// Set these in one place. BOOKING_URL falls back to scrolling to the form.
+const BOOKING_URL = ''; // e.g. 'https://cal.com/forward-army/briefing'
+const bookingHref = BOOKING_URL || '#request-form';
+
 const loop = [
   {
     idx: '01',
@@ -27,18 +31,22 @@ const loop = [
 
 const control = [
   {
+    code: 'C-01',
     t: 'Scoped access',
     d: 'Every capability is granted explicitly and bounded — the same badge-and-scope you would give a trusted contractor. No standing keys to everything.',
   },
   {
+    code: 'C-02',
     t: 'Full audit trail',
     d: 'Every file read, proposal, and change is recorded and attributable. You can always answer “what did it touch, and why?”',
   },
   {
+    code: 'C-03',
     t: 'Approval gates',
     d: 'Inspection is autonomous; action is not. Consequential steps wait behind a human sign-off you control.',
   },
   {
+    code: 'C-04',
     t: 'One-click revoke',
     d: 'Pull an agent off the ground instantly. Access ends the moment you decide it does — no cleanup, no residue.',
   },
@@ -69,6 +77,12 @@ const record = [
     t: 'State of the art, in production.',
     d: 'We track the research edge and put it to work where it earns its place — measured against your outcomes, not a demo reel.',
   },
+];
+
+const founders = [
+  { name: 'Adrian Szymczak', scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en' },
+  { name: 'Łukasz Augustyniak', scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en' },
+  { name: 'Roman Bartusiak', scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en' },
 ];
 
 const vectors = [
@@ -110,18 +124,23 @@ const vectors = [
           <span class="text-signal">Under your command.</span>
         </h1>
 
-        <p class="mt-8 max-w-2xl text-lead text-field-soft rise" style="animation-delay:.16s">
-          The way enterprises actually adopt hard technology is to
-          <span class="text-chalk">embed</span> — put a trusted engineer on the
-          ground who learns the domain and ships inside it. forward.army is the
-          platform that deploys AI agents the same way: granted controlled
-          access, held to command, and set loose to inspect your business,
-          propose the work, and — when you approve — implement it.
+        <p class="mt-8 max-w-2xl text-lead font-semibold text-chalk rise" style="animation-delay:.13s">
+          AI that works inside your business like a trusted hire — and only
+          where you allow it.
+        </p>
+
+        <p class="mt-5 max-w-2xl text-base leading-relaxed text-field-soft rise" style="animation-delay:.18s">
+          The way companies actually adopt hard technology is to
+          <span class="text-chalk">embed</span> — put a trusted expert on the
+          ground who learns the domain and ships inside it. forward.army deploys
+          AI agents the same way: granted controlled access, held to command,
+          set loose to inspect your business, propose the work, and — when you
+          approve — implement it.
         </p>
 
         <div class="mt-11 flex flex-wrap items-center gap-4 rise" style="animation-delay:.24s">
           <a
-            href="#deploy"
+            href="#request-form"
             class="group inline-flex items-center gap-3 bg-signal px-6 py-3.5 font-display text-lg font-bold text-ink transition-colors hover:bg-chalk hover:text-ink"
           >
             Request access
@@ -163,7 +182,7 @@ const vectors = [
         <div class="max-w-xl space-y-6 text-lead text-field md:pt-14">
           <p>
             A demo never changed a company. Embedding did. Sit a capable
-            engineer next to the problem, give them real access, and let them
+            expert next to the problem, give them real access, and let them
             learn the terrain — that is how technology crosses from
             <span class="text-ink">interesting</span> to
             <span class="text-ink">operational</span>.
@@ -188,21 +207,26 @@ const vectors = [
             <h2 id="loop-h" class="mt-6 text-h2 text-ink">Inspect. Propose. Implement.</h2>
           </div>
           <p class="max-w-sm text-field">
-            The loop a good engineer runs on their first month — now available
-            as supervised autonomy.
+            The loop a good hire runs in their first month — now available as
+            supervised autonomy.
           </p>
         </div>
 
-        <ol class="mt-16 grid gap-px overflow-hidden border border-[var(--edge)] bg-[var(--edge)] md:grid-cols-3">
-          {loop.map((step) => (
-            <li class="group flex flex-col bg-bone p-8 transition-colors hover:bg-bone/60">
-              <div class="flex items-baseline justify-between">
-                <span class="font-mono text-sm font-medium text-signal-deep">{step.idx}</span>
-                <Chevron count={3} strokeWidth={5} class="h-3 w-auto text-field-soft transition-colors group-hover:text-signal" />
+        <!-- Numbered sequence, divided by rules (not identical cards) -->
+        <ol class="mt-16 grid gap-y-12 md:grid-cols-3 md:gap-y-0">
+          {loop.map((step, i) => (
+            <li class={`relative ${i > 0 ? 'md:border-l md:border-[var(--edge-strong)] md:pl-10' : 'md:pr-10'} ${i === 1 ? 'md:px-10' : ''}`}>
+              <div class="flex items-center gap-4">
+                <span class="font-mono text-4xl font-medium leading-none text-signal-deep">
+                  {step.idx}
+                </span>
+                {i < 2 && (
+                  <Chevron count={2} strokeWidth={5} class="hidden h-3 w-auto text-signal-deep md:block" />
+                )}
               </div>
-              <h3 class="mt-8 text-h3 text-ink">{step.verb}</h3>
-              <p class="mt-2 font-display text-lg font-bold text-signal-deep">{step.lede}</p>
-              <p class="mt-4 text-field">{step.body}</p>
+              <h3 class="mt-6 text-h3 text-ink">{step.verb}</h3>
+              <p class="mt-1 font-display text-lg font-bold text-signal-deep">{step.lede}</p>
+              <p class="mt-4 max-w-sm text-field">{step.body}</p>
             </li>
           ))}
         </ol>
@@ -212,7 +236,7 @@ const vectors = [
     <!-- ============================ COMMAND =========================== -->
     <section id="command" aria-labelledby="command-h" class="relative overflow-hidden bg-ink text-chalk">
       <div class="grid-ticks pointer-events-none absolute inset-0 opacity-50" aria-hidden="true"></div>
-      <div class="brief-shell relative grid gap-x-16 gap-y-12 py-24 md:grid-cols-[0.9fr_1.1fr]">
+      <div class="brief-shell relative grid gap-x-16 gap-y-12 py-24 md:grid-cols-[0.85fr_1.15fr]">
         <div class="md:sticky md:top-24 md:self-start">
           <span class="mono-label text-signal">04 / Command &amp; control</span>
           <h2 id="command-h" class="mt-6 text-h2 text-chalk">
@@ -225,17 +249,19 @@ const vectors = [
           </p>
         </div>
 
-        <dl class="grid gap-px overflow-hidden rounded-none border border-[var(--edge-on-ink)] bg-[var(--edge-on-ink)] sm:grid-cols-2">
+        <!-- Control-code dossier (matches the service-record rhythm, not cards) -->
+        <ol class="border-t border-[var(--edge-on-ink)]">
           {control.map((c) => (
-            <div class="group bg-ink p-8">
-              <dt class="flex items-center gap-3 font-display text-xl font-bold text-chalk">
-                <Chevron count={1} strokeWidth={6} class="h-3.5 w-auto text-signal" />
+            <li class="grid items-baseline gap-x-6 gap-y-2 border-b border-[var(--edge-on-ink)] py-7 md:grid-cols-[4rem_1fr_1.3fr]">
+              <span class="font-mono text-sm font-medium text-signal">{c.code}</span>
+              <h3 class="flex items-center gap-3 font-display text-xl font-bold text-chalk">
+                <Chevron count={1} strokeWidth={6} class="h-3.5 w-auto shrink-0 text-signal" />
                 {c.t}
-              </dt>
-              <dd class="mt-4 text-field-soft">{c.d}</dd>
-            </div>
+              </h3>
+              <p class="text-field-soft">{c.d}</p>
+            </li>
           ))}
-        </dl>
+        </ol>
       </div>
     </section>
 
@@ -258,7 +284,7 @@ const vectors = [
 
         <dl class="mt-16 border-t border-[var(--edge-strong)]">
           {record.map((r) => (
-            <div class="group grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
+            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
               <dt class="contents">
                 <span class="flex items-center gap-3">
                   <span class="font-mono text-sm font-medium text-signal-deep">{r.idx}</span>
@@ -270,6 +296,28 @@ const vectors = [
             </div>
           ))}
         </dl>
+
+        <!-- Founders — named, verifiable proof -->
+        <div class="mt-16">
+          <span class="mono-label text-field">Signed by — founders</span>
+          <ul class="mt-6 grid gap-px overflow-hidden border border-[var(--edge)] bg-[var(--edge)] sm:grid-cols-3">
+            {founders.map((f) => (
+              <li class="flex flex-col justify-between gap-6 bg-bone-sink p-7">
+                <h3 class="text-h3 font-bold text-ink">{f.name}</h3>
+                <a
+                  href={f.scholar}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group inline-flex items-center gap-2 text-sm font-semibold text-signal-deep transition-colors hover:text-ink"
+                  aria-label={`${f.name} — Google Scholar publications (opens in a new tab)`}
+                >
+                  <span class="mono-label">Publications</span>
+                  <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -306,8 +354,8 @@ const vectors = [
 
     <!-- ============================= DEPLOY =========================== -->
     <section id="deploy" aria-labelledby="deploy-h" class="border-t border-[var(--edge)] bg-signal text-ink">
-      <div class="brief-shell grid gap-x-16 gap-y-10 py-24 md:grid-cols-[1.2fr_1fr] md:items-end">
-        <div>
+      <div class="brief-shell grid gap-x-16 gap-y-12 py-24 md:grid-cols-[1fr_1fr] md:items-start">
+        <div class="md:pt-4">
           <span class="mono-label text-ink">07 / Request access</span>
           <h2 id="deploy-h" class="mt-6 text-h2 text-ink">
             Give one agent a<br />bounded piece of ground.
@@ -317,16 +365,85 @@ const vectors = [
             you're comfortable granting — we'll deploy, brief you, and you decide
             what ships.
           </p>
-        </div>
-        <div class="flex flex-col gap-4 md:items-end">
+
           <a
-            href="mailto:command@forward.army?subject=Deployment%20request&body=Company%3A%0AProblem%3A%0AScope%20we%27re%20comfortable%20granting%3A%0A"
-            class="group inline-flex items-center gap-3 bg-ink px-7 py-4 font-display text-xl font-bold text-bone transition-colors hover:bg-bone hover:text-ink"
+            href={bookingHref}
+            class="group mt-8 inline-flex items-center gap-3 border-2 border-ink px-6 py-3.5 font-display text-lg font-bold text-ink transition-colors hover:bg-ink hover:text-bone"
           >
-            command@forward.army
+            Book a 20-min briefing
             <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
           </a>
-          <span class="mono-label text-ink">Reply within one business day</span>
+
+          <ul class="mt-10 space-y-3">
+            {[
+              'No access is granted until you say so.',
+              'Everything the agent does is logged and reversible.',
+              'Reply within one business day.',
+            ].map((point) => (
+              <li class="flex items-start gap-3 text-ink">
+                <Chevron count={1} strokeWidth={7} class="mt-1.5 h-3 w-auto shrink-0" />
+                <span class="font-medium">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Request-access form on an ink card (focal, high contrast) -->
+        <div id="request-form" class="scroll-mt-24 bg-ink p-7 text-chalk sm:p-9">
+          <form id="access-form" class="space-y-5" novalidate>
+            <p class="mono-label text-field-soft">Request access</p>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div class="flex flex-col gap-2">
+                <label for="f-name" class="mono-label text-field-soft">Name</label>
+                <input id="f-name" name="name" type="text" autocomplete="name" required
+                  class="rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
+                  placeholder="Jane Rivera" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="f-company" class="mono-label text-field-soft">Company</label>
+                <input id="f-company" name="company" type="text" autocomplete="organization" required
+                  class="rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
+                  placeholder="Acme Corp" />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="f-email" class="mono-label text-field-soft">Work email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required
+                class="rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
+                placeholder="jane@acme.com" />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="f-usecase" class="mono-label text-field-soft">What would you deploy an agent on?</label>
+              <textarea id="f-usecase" name="usecase" rows="3" required
+                class="resize-y rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
+                placeholder="One workflow, system, or question you'd start with."></textarea>
+            </div>
+
+            <!-- Honeypot: hidden from humans, catches bots -->
+            <div class="hidden" aria-hidden="true">
+              <label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+            </div>
+
+            <button type="submit"
+              class="group inline-flex w-full items-center justify-center gap-3 bg-signal px-6 py-4 font-display text-lg font-bold text-ink transition-colors hover:bg-chalk hover:text-ink sm:w-auto">
+              <span data-label>Request access</span>
+              <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
+            </button>
+          </form>
+
+          <!-- Live region: status, success, error -->
+          <p id="form-status" class="mt-4 text-sm text-field-soft" role="status" aria-live="polite"></p>
+
+          <div id="form-success" hidden class="border-l-2 border-signal pl-5">
+            <p class="font-display text-xl font-bold text-chalk">Request received.</p>
+            <p class="mt-2 text-field-soft">
+              We'll reply within one business day with next steps. Nothing is
+              accessed until you grant it.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -334,3 +451,56 @@ const vectors = [
 
   <Footer />
 </Base>
+
+<script>
+  const form = document.getElementById('access-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('form-status');
+  const successEl = document.getElementById('form-success');
+  const ENDPOINT = '/api/request-access';
+  const FALLBACK = 'command@forward.army';
+
+  if (form && statusEl && successEl) {
+    const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+    const btnLabel = form.querySelector('[data-label]');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = '';
+      statusEl.className = 'mt-4 text-sm text-field-soft';
+
+      // Honeypot + native validity
+      if ((form.elements.namedItem('website') as HTMLInputElement)?.value) return;
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      btn.disabled = true;
+      if (btnLabel) btnLabel.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.hidden = true;
+        successEl.hidden = false;
+        (successEl.querySelector('p') as HTMLElement)?.focus?.();
+      } catch (err) {
+        btn.disabled = false;
+        if (btnLabel) btnLabel.textContent = 'Request access';
+        statusEl.className = 'mt-4 text-sm text-chalk';
+        statusEl.innerHTML =
+          'Could not send just now. Email us directly at ' +
+          '<a class="font-semibold text-signal underline" href="mailto:' +
+          FALLBACK +
+          '">' +
+          FALLBACK +
+          '</a>.';
+      }
+    });
+  }
+</script>

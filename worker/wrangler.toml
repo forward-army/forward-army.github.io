@@ -1,0 +1,18 @@
+# Cloudflare Worker that receives the "Request access" form and emails the lead.
+# Same-origin with the site: it intercepts forward.army/api/* before Pages.
+name = "forward-army-forms"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Serve at the site's own domain so the browser POST is same-origin (no CORS).
+routes = [
+  { pattern = "forward.army/api/*", zone_name = "forward.army" }
+]
+
+[vars]
+# Where leads are delivered, and the verified sender (must be on forward.army).
+LEAD_TO = "command@forward.army"
+LEAD_FROM = "forward.army <noreply@forward.army>"
+
+# Secret (do NOT put here) — set with:
+#   cd worker && npx wrangler secret put RESEND_API_KEY
