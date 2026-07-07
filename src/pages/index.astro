@@ -138,20 +138,11 @@ const vectors = [
         </h1>
 
         <p class="mt-8 max-w-2xl text-lead font-semibold text-chalk rise" style="animation-delay:.13s">
-          AI that works inside your business like a trusted hire — and only
-          where you allow it.
+          AI that works inside your business like a trusted hire — granted
+          access, held to command, and only ever where you allow it.
         </p>
 
-        <p class="mt-5 max-w-2xl text-base leading-relaxed text-field-soft rise" style="animation-delay:.18s">
-          The way companies actually adopt hard technology is to
-          <span class="text-chalk">embed</span> — put a trusted expert on the
-          ground who learns the domain and ships inside it. forward.army deploys
-          AI agents the same way: granted controlled access, held to command,
-          set loose to inspect your business, propose the work, and — when you
-          approve — implement it.
-        </p>
-
-        <div class="mt-11 flex flex-wrap items-center gap-4 rise" style="animation-delay:.24s">
+        <div class="mt-11 flex flex-wrap items-center gap-4 rise" style="animation-delay:.20s">
           <a
             href="#request-form"
             class="group inline-flex items-center gap-3 bg-signal px-6 py-3.5 font-display text-lg font-bold text-ink transition-colors hover:bg-chalk hover:text-ink"
@@ -192,7 +183,7 @@ const vectors = [
             Trust is earned<br />on the ground.
           </h2>
         </div>
-        <div class="max-w-xl space-y-6 text-lead text-field md:pt-14">
+        <div class="reveal max-w-xl space-y-6 text-lead text-field md:pt-14">
           <p>
             A demo never changed a company. Embedding did. Sit a capable
             expert next to the problem, give them real access, and let them
@@ -225,19 +216,42 @@ const vectors = [
           </p>
         </div>
 
-        <!-- Numbered sequence, divided by rules (not identical cards) -->
-        <ol class="mt-16 grid gap-y-12 md:grid-cols-3 md:gap-y-0">
+        <!-- Animated rail (desktop): a signal line draws through 01 → 02 → 03,
+             lighting each node as it arrives. Decorative — numbers repeat in
+             the content for mobile/AT. -->
+        <div
+          class="mt-16 hidden items-center gap-5 md:flex"
+          data-loop
+          aria-hidden="true"
+        >
           {loop.map((step, i) => (
-            <li class={`relative ${i > 0 ? 'md:border-l md:border-[var(--edge-strong)] md:pl-10' : 'md:pr-10'} ${i === 1 ? 'md:px-10' : ''}`}>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-4xl font-medium leading-none text-signal-deep">
-                  {step.idx}
+            <>
+              <span
+                class="loop-node font-mono text-3xl font-medium leading-none"
+                style={`--d:${(i * 0.65).toFixed(2)}s`}
+              >
+                {step.idx}
+              </span>
+              {i < 2 && (
+                <span class="loop-seg flex-1">
+                  <span class="loop-fill" style={`--d:${(i * 0.65 + 0.15).toFixed(2)}s`}></span>
                 </span>
-                {i < 2 && (
-                  <Chevron count={2} strokeWidth={5} class="hidden h-3 w-auto text-signal-deep md:block" />
-                )}
-              </div>
-              <h3 class="mt-6 text-h3 text-ink">{step.verb}</h3>
+              )}
+            </>
+          ))}
+        </div>
+
+        <!-- Numbered sequence, divided by rules (not identical cards) -->
+        <ol class="mt-10 grid gap-y-12 md:grid-cols-3 md:gap-y-0">
+          {loop.map((step, i) => (
+            <li
+              class={`reveal relative ${i > 0 ? 'md:border-l md:border-[var(--edge-strong)] md:pl-10' : 'md:pr-10'} ${i === 1 ? 'md:px-10' : ''}`}
+              style={`--reveal-delay:${(i * 0.12).toFixed(2)}s`}
+            >
+              <span class="font-mono text-2xl font-medium leading-none text-signal-deep md:hidden">
+                {step.idx}
+              </span>
+              <h3 class="mt-4 text-h3 text-ink md:mt-0">{step.verb}</h3>
               <p class="mt-1 font-display text-lg font-bold text-signal-deep">{step.lede}</p>
               <p class="mt-4 max-w-sm text-field">{step.body}</p>
             </li>
@@ -260,10 +274,17 @@ const vectors = [
             you stay in command of everything they can reach and everything
             they do.
           </p>
+          <a
+            href="#request-form"
+            class="group mt-8 inline-flex items-center gap-2.5 font-display text-lg font-bold text-signal transition-colors hover:text-chalk"
+          >
+            Put an agent under command
+            <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
+          </a>
         </div>
 
         <!-- Control-code dossier (matches the service-record rhythm, not cards) -->
-        <ol class="border-t border-[var(--edge-on-ink)]">
+        <ol class="reveal border-t border-[var(--edge-on-ink)]">
           {control.map((c) => (
             <li class="grid items-baseline gap-x-6 gap-y-2 border-b border-[var(--edge-on-ink)] py-7 md:grid-cols-[4rem_1fr_1.3fr]">
               <span class="font-mono text-sm font-medium text-signal">{c.code}</span>
@@ -295,6 +316,19 @@ const vectors = [
           </p>
         </div>
 
+        <dl class="reveal mt-14 grid grid-cols-2 gap-x-8 gap-y-6 border-y border-[var(--edge-strong)] py-8 sm:grid-cols-3">
+          {[
+            ['Peer-reviewed citations', '820+'],
+            ['Published at', 'ACL · EMNLP · NeurIPS'],
+            ['Publishing since', '2014'],
+          ].map(([k, v]) => (
+            <div>
+              <dt class="mono-label text-field">{k}</dt>
+              <dd class="mt-2 font-display text-lg font-bold text-ink">{v}</dd>
+            </div>
+          ))}
+        </dl>
+
         <dl class="mt-16 border-t border-[var(--edge-strong)]">
           {record.map((r) => (
             <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
@@ -311,7 +345,7 @@ const vectors = [
         </dl>
 
         <!-- Founders — named, verifiable proof -->
-        <div class="mt-16">
+        <div class="reveal mt-16">
           <span class="mono-label text-field">Signed by — founders</span>
           <ul class="mt-6 grid gap-px overflow-hidden border border-[var(--edge)] bg-[var(--edge)] sm:grid-cols-3">
             {founders.map((f) => (
@@ -355,7 +389,7 @@ const vectors = [
           Same doctrine. Human and machine.
         </h2>
 
-        <div class="mt-14 grid gap-8 md:grid-cols-2">
+        <div class="reveal mt-14 grid gap-8 md:grid-cols-2">
           {vectors.map((v, i) => (
             <article
               class={`flex flex-col justify-between p-9 ${
@@ -407,7 +441,7 @@ const vectors = [
         </div>
 
         <!-- Request-access form on an ink card (focal, high contrast) -->
-        <div id="request-form" class="scroll-mt-24 bg-ink p-7 text-chalk sm:p-9">
+        <div id="request-form" class="reveal scroll-mt-24 bg-ink p-7 text-chalk sm:p-9" style="--reveal-delay:.1s">
           <form id="access-form" class="space-y-5" novalidate>
             <p class="mono-label text-field-soft">Request access</p>
 
@@ -469,6 +503,28 @@ const vectors = [
 
   <Footer />
 </Base>
+
+<script>
+  // Scroll reveal + loop diagram trigger. Reduced-motion shows the final state.
+  const revealTargets = document.querySelectorAll('.reveal, [data-loop]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealTargets.forEach((el) => el.classList.add('in-view'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            obs.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -8% 0px' },
+    );
+    revealTargets.forEach((el) => io.observe(el));
+  }
+</script>
 
 <script>
   const form = document.getElementById('access-form') as HTMLFormElement | null;

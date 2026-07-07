@@ -154,3 +154,69 @@
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveal — sections settle in as they enter the viewport.
+ * JS adds .in-view (IntersectionObserver); reduced-motion shows final.
+ * ------------------------------------------------------------------ */
+@layer components {
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.75s var(--ease-brief),
+      transform 0.75s var(--ease-brief);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The loop diagram: a signal line draws through 01 → 02 → 03, lighting
+     each node as it arrives. Nodes/segments stagger via transition-delay. */
+  .loop-node {
+    /* Inactive state must still clear AA on bone-sink (field = 4.97:1);
+       field-soft would fail the large-text 3:1 check before animation. */
+    color: var(--color-field);
+    transition: color 0.5s var(--ease-brief);
+    transition-delay: var(--d, 0s);
+  }
+  [data-loop].in-view .loop-node {
+    color: var(--color-signal-deep);
+  }
+  .loop-seg {
+    position: relative;
+    height: 2px;
+    background: var(--edge-strong);
+    overflow: hidden;
+  }
+  .loop-fill {
+    position: absolute;
+    inset: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: var(--color-signal);
+    transition: transform 0.6s var(--ease-brief);
+    transition-delay: var(--d, 0s);
+  }
+  [data-loop].in-view .loop-fill {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .loop-node {
+    color: var(--color-signal-deep);
+    transition: none;
+  }
+  .loop-fill {
+    transform: scaleX(1);
+    transition: none;
+  }
+}
