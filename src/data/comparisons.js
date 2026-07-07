@@ -30,6 +30,11 @@ export const comparisons = [
         them: 'Connectors and uploads you manage yourself',
       },
       {
+        k: 'Reliability approach',
+        us: 'Purpose-built per use case; deterministic wherever possible, the model only where it adds value — testable, high success rates',
+        them: 'General model output — reliability is on you',
+      },
+      {
         k: 'Destructive actions',
         us: 'Wait for your approval; multi-model guardrails check first',
         them: 'You supervise the assistant / Operator directly',
@@ -72,6 +77,11 @@ export const comparisons = [
         them: 'You wire up tools, MCP, and permissions yourself',
       },
       {
+        k: 'Reliability approach',
+        us: 'Purpose-built per use case; deterministic wherever possible, the model only where it adds value — testable, high success rates',
+        them: 'Whatever you engineer around the model',
+      },
+      {
         k: 'Destructive actions',
         us: 'Approval-gated, with multi-model guardrails',
         them: 'Governed by whatever you build around it',
@@ -112,6 +122,11 @@ export const comparisons = [
         k: 'Access & control',
         us: 'Granted, scoped, and revocable per capability',
         them: 'Integrations you connect yourself',
+      },
+      {
+        k: 'Reliability approach',
+        us: 'Purpose-built per use case; deterministic wherever possible, the model only where it adds value — testable, high success rates',
+        them: 'Autonomous general-purpose execution',
       },
       {
         k: 'Destructive actions',
