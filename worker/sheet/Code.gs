@@ -1,30 +1,26 @@
 /**
  * forward.army — leads → Google Sheet.
  *
- * Bound to a Google Sheet, published as a Web App. The Cloudflare Worker POSTs
- * each lead here (server-side), and this appends a row to the "Leads" tab.
+ * Bound to a Google Sheet (Extensions → Apps Script), published as a Web App.
+ * The Cloudflare Worker POSTs each lead here and this appends a row to the
+ * "Leads" tab.
  *
  * Setup:
- *   1. Create a Google Sheet.
- *   2. Extensions → Apps Script → paste this file → Save.
- *   3. Deploy → New deployment → type "Web app":
- *        - Execute as: Me
- *        - Who has access: Anyone
- *      Copy the Web app URL.
- *   4. (Optional) set SHEET_TOKEN below to a random string and give the same
- *      value to the Worker via `wrangler secret put SHEET_TOKEN`.
- *   5. Give the Web app URL to the Worker:
- *        cd worker && npx wrangler secret put SHEET_WEBHOOK_URL
+ *   1. Extensions → Apps Script → paste this file → Save.
+ *   2. Set SHEET_TOKEN below to the same value as the Worker's SHEET_TOKEN
+ *      secret (leave '' to disable the check).
+ *   3. Deploy → Manage deployments → Edit → New version →
+ *      Execute as: Me, Who has access: Anyone → Deploy.
  */
 
-// Optional shared secret. Leave '' to disable the check.
+// Shared secret — must match the Worker's SHEET_TOKEN. '' disables the check.
 const SHEET_TOKEN = '';
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-    const data = JSON.parse(e.postData.contents || '{}');
+    const data = JSON.parse((e && e.postData && e.postData.contents) || '{}');
 
     if (SHEET_TOKEN && data.token !== SHEET_TOKEN) {
       return json({ ok: false, error: 'forbidden' });

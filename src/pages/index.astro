@@ -80,16 +80,19 @@ const record = [
 const founders = [
   {
     name: 'Łukasz Augustyniak',
+    bio: 'NLP researcher focused on large language models and AI for legal work. Published across sentiment analysis, aspect extraction, and speech-recognition evaluation.',
     scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en',
     linkedin: 'https://www.linkedin.com/in/lukaszaugustyniak/',
   },
   {
     name: 'Roman Bartusiak',
+    bio: 'ML engineer and researcher in network science and distributed graph processing. Co-author of the LEPISZCZE Polish NLP benchmark and WordNet2Vec.',
     scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en',
     linkedin: 'https://www.linkedin.com/in/romanbartusiak/',
   },
   {
     name: 'Adrian Szymczak',
+    bio: 'AI solutions architect spanning large language models, data science, and software engineering. Published work on conversational-speech modeling and ASR-error robustness.',
     scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en',
     linkedin: 'https://www.linkedin.com/in/adrianszymczak/',
   },
@@ -312,9 +315,10 @@ const vectors = [
           <span class="mono-label text-field">Signed by — founders</span>
           <ul class="mt-6 grid gap-px overflow-hidden border border-[var(--edge)] bg-[var(--edge)] sm:grid-cols-3">
             {founders.map((f) => (
-              <li class="flex flex-col justify-between gap-6 bg-bone-sink p-7">
+              <li class="flex flex-col gap-4 bg-bone-sink p-7">
                 <h3 class="text-h3 font-bold text-ink">{f.name}</h3>
-                <div class="flex items-center gap-3">
+                <p class="text-sm leading-relaxed text-field">{f.bio}</p>
+                <div class="mt-auto flex items-center gap-3 pt-2">
                   <a
                     href={f.scholar}
                     target="_blank"
