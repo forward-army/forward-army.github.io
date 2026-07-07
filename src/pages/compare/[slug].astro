@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Chevron from '../../components/Chevron.astro';
+import { comparisons } from '../../data/comparisons.js';
+
+export function getStaticPaths() {
+  return comparisons.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props;
+const title = `forward.army vs ${c.name} — the difference`;
+const description = c.tagline;
+const others = comparisons.filter((x) => x.slug !== c.slug);
+---
+<Base title={title} description={description}>
+  <Header />
+
+  <main id="main">
+    <!-- ============================= HERO ============================= -->
+    <section class="relative overflow-hidden bg-ink text-chalk">
+      <div class="grid-ticks pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+      <div class="brief-shell relative pt-14 pb-20 sm:pt-20 sm:pb-24">
+        <a href="/" class="group inline-flex items-center gap-2 mono-label text-field-soft transition-colors hover:text-signal">
+          <Chevron count={1} strokeWidth={6} class="h-[0.7rem] w-auto rotate-180" />
+          Back to forward.army
+        </a>
+
+        <span class="mono-label mt-10 block text-signal">Comparison / {c.vendor}</span>
+        <h1 class="mt-5 text-hero font-extrabold leading-[0.98] text-chalk">
+          forward<span class="text-signal">.army</span>
+          <span class="text-field-soft">vs</span>
+          {c.name}
+        </h1>
+        <p class="mt-8 max-w-2xl text-lead font-semibold text-chalk">{c.tagline}</p>
+        <p class="mt-5 max-w-2xl text-base leading-relaxed text-field-soft">{c.intro}</p>
+      </div>
+    </section>
+
+    <!-- ========================= COMPARISON ========================== -->
+    <section aria-label={`How forward.army compares with ${c.name}`} class="bg-bone">
+      <div class="brief-shell py-20 sm:py-24">
+        <span class="mono-label text-signal-deep">Side by side</span>
+
+        <!-- desktop header row -->
+        <div class="mt-10 hidden grid-cols-[minmax(9rem,0.9fr)_1.5fr_1.5fr] gap-x-8 border-b-2 border-ink pb-4 md:grid">
+          <span></span>
+          <span class="font-display text-lg font-extrabold text-ink">forward.army</span>
+          <span class="font-display text-lg font-extrabold text-field">{c.name}</span>
+        </div>
+
+        <dl class="md:mt-0">
+          {c.rows.map((r) => (
+            <div class="grid gap-x-8 gap-y-3 border-b border-[var(--edge)] py-6 md:grid-cols-[minmax(9rem,0.9fr)_1.5fr_1.5fr] md:items-start">
+              <dt class="mono-label text-signal-deep">{r.k}</dt>
+              <dd class="flex gap-3">
+                <Chevron count={1} strokeWidth={7} class="mt-[0.35rem] h-3 w-auto shrink-0 text-signal-deep" />
+                <p class="text-ink">
+                  <span class="mono-label mb-1 block text-field md:hidden">forward.army</span>
+                  {r.us}
+                </p>
+              </dd>
+              <dd class="text-field">
+                <span class="mono-label mb-1 block md:hidden">{c.name}</span>
+                {r.them}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        {c.note && (
+          <p class="mt-8 max-w-2xl border-l-2 border-[var(--edge-strong)] pl-5 text-sm text-field">
+            {c.note}
+          </p>
+        )}
+      </div>
+    </section>
+
+    <!-- ============================== CTA ============================= -->
+    <section class="border-t border-[var(--edge)] bg-signal text-ink">
+      <div class="brief-shell grid gap-x-16 gap-y-8 py-20 md:grid-cols-[1.3fr_1fr] md:items-center">
+        <div>
+          <h2 class="text-h2 text-ink">Deploy one, and see the difference.</h2>
+          <p class="mt-5 max-w-xl text-lead text-ink">
+            Bring a real problem and a scope you are comfortable granting. We
+            deploy, brief you, and you decide what ships.
+          </p>
+        </div>
+        <div class="md:justify-self-end">
+          <a
+            href="/#request-form"
+            class="group inline-flex items-center gap-3 bg-ink px-7 py-4 font-display text-xl font-bold text-bone transition-colors hover:bg-bone hover:text-ink"
+          >
+            Request access
+            <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= OTHER COMPARISONS ===================== -->
+    <section aria-label="Other comparisons" class="bg-ink text-chalk">
+      <div class="brief-shell py-14">
+        <span class="mono-label text-field-soft">Compare against</span>
+        <div class="mt-5 flex flex-wrap gap-4">
+          {others.map((o) => (
+            <a
+              href={`/compare/${o.slug}`}
+              class="group inline-flex items-center gap-2.5 border border-[var(--edge-on-ink)] px-5 py-3 font-display text-lg font-bold text-chalk transition-colors hover:border-signal hover:text-signal"
+            >
+              vs {o.name}
+              <Chevron count={1} strokeWidth={6} class="chev-advance h-3.5 w-auto" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

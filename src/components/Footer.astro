@@ -1,11 +1,12 @@
 ---
 import Logo from './Logo.astro';
+import { comparisons } from '../data/comparisons.js';
 const year = 2026;
 ---
 <footer class="border-t border-[var(--edge-on-ink)] bg-ink text-chalk">
-  <div class="brief-shell grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
+  <div class="brief-shell grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
     <div>
-      <a href="#top" class="text-chalk" aria-label="forward.army — home">
+      <a href="/" class="text-chalk" aria-label="forward.army — home">
         <Logo />
       </a>
       <p class="mt-4 max-w-xs text-sm text-field-soft">
@@ -16,11 +17,22 @@ const year = 2026;
 
     <nav aria-label="Site" class="flex flex-col gap-3">
       <span class="mono-label text-field-soft">Brief</span>
-      <a href="#doctrine" class="text-sm text-chalk/90 transition-colors hover:text-signal">Doctrine</a>
-      <a href="#loop" class="text-sm text-chalk/90 transition-colors hover:text-signal">The loop</a>
-      <a href="#command" class="text-sm text-chalk/90 transition-colors hover:text-signal">Command &amp; control</a>
-      <a href="#team" class="text-sm text-chalk/90 transition-colors hover:text-signal">Service record</a>
-      <a href="#deploy" class="text-sm text-chalk/90 transition-colors hover:text-signal">Request access</a>
+      <a href="/#doctrine" class="text-sm text-chalk/90 transition-colors hover:text-signal">Doctrine</a>
+      <a href="/#loop" class="text-sm text-chalk/90 transition-colors hover:text-signal">The loop</a>
+      <a href="/#how" class="text-sm text-chalk/90 transition-colors hover:text-signal">How it works</a>
+      <a href="/use-cases" class="text-sm text-chalk/90 transition-colors hover:text-signal">Use cases</a>
+      <a href="/#command" class="text-sm text-chalk/90 transition-colors hover:text-signal">Command &amp; control</a>
+      <a href="/#team" class="text-sm text-chalk/90 transition-colors hover:text-signal">Service record</a>
+    </nav>
+
+    <nav aria-label="Compare" class="flex flex-col gap-3">
+      <span class="mono-label text-field-soft">Compare</span>
+      {comparisons.map((c) => (
+        <a href={`/compare/${c.slug}`} class="text-sm text-chalk/90 transition-colors hover:text-signal">
+          vs {c.name}
+        </a>
+      ))}
+      <a href="/compare" class="text-sm text-chalk/90 transition-colors hover:text-signal">All comparisons</a>
     </nav>
 
     <div class="flex flex-col gap-3">
@@ -29,6 +41,7 @@ const year = 2026;
         href="mailto:command@forward.army"
         class="text-sm text-chalk/90 transition-colors hover:text-signal"
       >command@forward.army</a>
+      <a href="/#request-form" class="text-sm text-chalk/90 transition-colors hover:text-signal">Request access</a>
       <span class="mono-label mt-4 text-field-soft">Coordinates</span>
       <span class="font-mono text-xs text-field-soft">51.1079° N&nbsp;&nbsp;17.0385° E</span>
     </div>

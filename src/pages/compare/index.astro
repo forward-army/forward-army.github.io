@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Chevron from '../../components/Chevron.astro';
+import { comparisons } from '../../data/comparisons.js';
+
+const title = 'How forward.army compares — vs ChatGPT, Claude, Viktor';
+const description =
+  'forward.army is a governed operator that deploys AI agents inside your systems. See how that differs from ChatGPT, Anthropic (Claude), and Viktor.';
+---
+<Base title={title} description={description}>
+  <Header />
+
+  <main id="main">
+    <section class="relative overflow-hidden bg-ink text-chalk">
+      <div class="grid-ticks pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+      <div class="brief-shell relative pt-14 pb-20 sm:pt-20 sm:pb-24">
+        <a href="/" class="group inline-flex items-center gap-2 mono-label text-field-soft transition-colors hover:text-signal">
+          <Chevron count={1} strokeWidth={6} class="h-[0.7rem] w-auto rotate-180" />
+          Back to forward.army
+        </a>
+        <span class="mono-label mt-10 block text-signal">Comparisons</span>
+        <h1 class="mt-5 max-w-[20ch] text-hero font-extrabold leading-[0.98] text-chalk">
+          A tool, or an <span class="text-signal">operator</span>?
+        </h1>
+        <p class="mt-8 max-w-2xl text-lead text-field-soft">
+          Most AI products are powerful tools you operate yourself. forward.army
+          is a forward-deployed operator: governed agents that run inside your
+          systems, ship work as PRs, and stay under your command. Here is how
+          that lands against the tools you already know.
+        </p>
+      </div>
+    </section>
+
+    <section aria-label="Comparisons" class="bg-bone">
+      <div class="brief-shell py-20 sm:py-24">
+        <ul class="grid gap-px overflow-hidden border border-[var(--edge-strong)] bg-[var(--edge-strong)] md:grid-cols-3">
+          {comparisons.map((c) => (
+            <li>
+              <a href={`/compare/${c.slug}`} class="group flex h-full flex-col justify-between gap-8 bg-bone p-8 transition-colors hover:bg-bone-sink">
+                <div>
+                  <span class="mono-label text-signal-deep">vs {c.vendor}</span>
+                  <h2 class="mt-4 text-h3 text-ink">forward.army vs {c.name}</h2>
+                  <p class="mt-3 text-field">{c.tagline}</p>
+                </div>
+                <span class="inline-flex items-center gap-2 font-display text-lg font-bold text-signal-deep">
+                  See the difference
+                  <Chevron count={2} strokeWidth={6} class="chev-advance h-3.5 w-auto" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

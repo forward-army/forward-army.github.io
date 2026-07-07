@@ -13,7 +13,17 @@
 import puppeteer from 'puppeteer';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 
-const URL = process.env.A11Y_URL || 'http://localhost:4321/';
+const BASE = process.env.A11Y_BASE || 'http://localhost:4321';
+const PATHS = process.env.A11Y_URL
+  ? [process.env.A11Y_URL]
+  : [
+      '/',
+      '/compare',
+      '/compare/chatgpt',
+      '/compare/claude',
+      '/compare/viktor',
+      '/use-cases',
+    ];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 const c = {
@@ -31,55 +41,59 @@ const browser = await puppeteer.launch({
   args: ['--no-sandbox', '--disable-dev-shm-usage'],
 });
 
+let failed = 0;
 try {
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1280, height: 1024 });
+  for (const path of PATHS) {
+    const url = BASE + path;
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1280, height: 1024 });
 
-  // Stable render: no entrance animations, so we measure the settled UI.
-  await page.emulateMediaFeatures([
-    { name: 'prefers-reduced-motion', value: 'reduce' },
-  ]);
-
-  console.log(c.dim(`→ scanning ${URL} (WCAG 2.1 AA via axe-core)`));
-  await page.goto(URL, { waitUntil: 'networkidle0', timeout: 60000 });
-
-  // Wait for web fonts and any lingering animations to finish.
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-    const anims = document.getAnimations?.() ?? [];
-    await Promise.race([
-      Promise.allSettled(anims.map((a) => a.finished)),
-      new Promise((r) => setTimeout(r, 1500)),
+    // Stable render: no entrance animations, so we measure the settled UI.
+    await page.emulateMediaFeatures([
+      { name: 'prefers-reduced-motion', value: 'reduce' },
     ]);
-  });
 
-  const results = await new AxePuppeteer(page).withTags(TAGS).analyze();
-  const { violations } = results;
+    await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
 
-  if (violations.length === 0) {
-    console.log(c.green(`✓ No WCAG 2.1 AA violations found.`));
-    console.log(
-      c.dim(
-        `  ${results.passes.length} checks passed · ${results.incomplete.length} needs-review · ${results.inapplicable.length} n/a`,
-      ),
-    );
-    process.exit(0);
-  }
+    // Wait for web fonts and any lingering animations to finish.
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      const anims = document.getAnimations?.() ?? [];
+      await Promise.race([
+        Promise.allSettled(anims.map((a) => a.finished)),
+        new Promise((r) => setTimeout(r, 1500)),
+      ]);
+    });
 
-  const total = violations.reduce((n, v) => n + v.nodes.length, 0);
-  console.log(c.red(c.bold(`\n✘ ${total} WCAG 2.1 AA violation(s) across ${violations.length} rule(s):\n`)));
+    const results = await new AxePuppeteer(page).withTags(TAGS).analyze();
+    const { violations } = results;
+    await page.close();
 
-  for (const v of violations) {
-    console.log(`${c.red('●')} ${c.bold(v.id)} — ${v.help} ${c.dim(`[${v.impact}]`)}`);
-    console.log(`  ${c.dim(v.helpUrl)}`);
-    for (const node of v.nodes) {
-      console.log(`  ${c.yellow('→')} ${node.target.join(' ')}`);
-      const detail = node.failureSummary?.split('\n').filter(Boolean).slice(1).join(' ');
-      if (detail) console.log(`    ${c.dim(detail)}`);
+    if (violations.length === 0) {
+      console.log(`${c.green('✓')} ${c.dim(path)} — clean ${c.dim(`(${results.passes.length} passed, ${results.incomplete.length} needs-review)`)}`);
+      continue;
+    }
+
+    failed += 1;
+    const total = violations.reduce((n, v) => n + v.nodes.length, 0);
+    console.log(c.red(c.bold(`\n✘ ${path} — ${total} WCAG 2.1 AA violation(s):`)));
+    for (const v of violations) {
+      console.log(`  ${c.red('●')} ${c.bold(v.id)} — ${v.help} ${c.dim(`[${v.impact}]`)}`);
+      for (const node of v.nodes) {
+        console.log(`    ${c.yellow('→')} ${node.target.join(' ')}`);
+        const detail = node.failureSummary?.split('\n').filter(Boolean).slice(1).join(' ');
+        if (detail) console.log(`      ${c.dim(detail)}`);
+      }
     }
     console.log('');
   }
-  process.exit(1);
 } finally {
   await browser.close();
 }
+
+if (failed > 0) {
+  console.log(c.red(c.bold(`\n${failed} page(s) failed WCAG 2.1 AA.`)));
+  process.exit(1);
+}
+console.log(c.green(c.bold(`\n✓ All ${PATHS.length} pages pass WCAG 2.1 AA.`)));
+process.exit(0);
