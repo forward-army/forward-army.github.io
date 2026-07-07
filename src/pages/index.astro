@@ -54,26 +54,10 @@ const how = [
 ];
 
 const control = [
-  {
-    code: 'C-01',
-    t: 'Scoped access',
-    d: 'Every capability is granted explicitly and bounded — the same badge-and-scope you would give a trusted contractor. No standing keys to everything.',
-  },
-  {
-    code: 'C-02',
-    t: 'Full audit trail',
-    d: 'Every file read, proposal, and change is recorded and attributable. You can always answer “what did it touch, and why?”',
-  },
-  {
-    code: 'C-03',
-    t: 'Approval gates',
-    d: 'Inspection is autonomous; action is not. Consequential steps wait behind a human sign-off you control.',
-  },
-  {
-    code: 'C-04',
-    t: 'One-click revoke',
-    d: 'Pull an agent off the ground instantly. Access ends the moment you decide it does — no cleanup, no residue.',
-  },
+  { t: 'Scoped', d: 'Access is granted and bounded — never standing.' },
+  { t: 'Audited', d: 'Every action is logged and attributable.' },
+  { t: 'Gated', d: 'Consequential steps wait for your sign-off.' },
+  { t: 'Revocable', d: 'Off the ground in one click — no residue.' },
 ];
 
 const record = [
@@ -360,19 +344,18 @@ const faqs = [
           </a>
         </div>
 
-        <!-- Control-code dossier (matches the service-record rhythm, not cards) -->
-        <ol class="reveal border-t border-[var(--edge-on-ink)]">
+        <!-- Tight control readout — reinforces command without repeating How -->
+        <ul class="reveal space-y-6 border-t border-[var(--edge-on-ink)] pt-9">
           {control.map((c) => (
-            <li class="grid items-baseline gap-x-6 gap-y-2 border-b border-[var(--edge-on-ink)] py-7 md:grid-cols-[4rem_1fr_1.3fr]">
-              <span class="font-mono text-sm font-medium text-signal">{c.code}</span>
-              <h3 class="flex items-center gap-3 font-display text-xl font-bold text-chalk">
-                <Chevron count={1} strokeWidth={6} class="h-3.5 w-auto shrink-0 text-signal" />
-                {c.t}
-              </h3>
-              <p class="text-field-soft">{c.d}</p>
+            <li class="flex items-baseline gap-4 border-b border-[var(--edge-on-ink)] pb-6">
+              <Chevron count={1} strokeWidth={7} class="h-3.5 w-auto shrink-0 translate-y-1 text-signal" />
+              <p class="text-lead">
+                <span class="font-display font-bold text-chalk">{c.t}.</span>
+                <span class="text-field-soft"> {c.d}</span>
+              </p>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
 
