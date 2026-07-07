@@ -47,6 +47,7 @@ const ogImage = new URL('/og.svg', Astro.site ?? 'https://forward.army').href;
     <meta name="twitter:image" content={ogImage} />
 
     <script
+      is:inline
       type="application/ld+json"
       set:html={JSON.stringify({
         '@context': 'https://schema.org',

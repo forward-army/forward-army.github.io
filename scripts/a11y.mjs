@@ -25,7 +25,9 @@ const c = {
 };
 
 const browser = await puppeteer.launch({
-  headless: 'shell',
+  headless: true,
+  // Honours PUPPETEER_EXECUTABLE_PATH when set (used in CI to point at a
+  // system Chrome with its OS deps satisfied).
   args: ['--no-sandbox', '--disable-dev-shm-usage'],
 });
 

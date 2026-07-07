@@ -11,6 +11,11 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# We provision Chrome explicitly (setup-chrome) for the audit jobs, so skip
+# Puppeteer's own ~150MB browser download during npm ci everywhere.
+env:
+  PUPPETEER_SKIP_DOWNLOAD: 'true'
+
 jobs:
   build:
     name: Type-check & build
@@ -20,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install
@@ -40,7 +45,7 @@ jobs:
           retention-days: 3
 
   accessibility:
-    name: WCAG 2.1 AA (pa11y)
+    name: WCAG 2.1 AA (axe-core)
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -48,11 +53,17 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install
         run: npm ci
+
+      - name: Set up Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          install-dependencies: true
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -60,8 +71,10 @@ jobs:
           name: dist
           path: dist
 
-      - name: Run pa11y (axe + HTML_CodeSniffer)
+      - name: Run axe-core WCAG 2.1 AA scan
         run: npm run a11y
+        env:
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
   lighthouse:
     name: Lighthouse
@@ -72,11 +85,17 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install
         run: npm ci
+
+      - name: Set up Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          install-dependencies: true
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -86,3 +105,5 @@ jobs:
 
       - name: Run Lighthouse CI
         run: npm run test:lighthouse
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}

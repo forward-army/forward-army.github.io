@@ -12,6 +12,8 @@ export default defineConfig({
   compressHTML: true,
   integrations: [sitemap()],
   vite: {
-    plugins: [tailwindcss()],
+    // Cast: @tailwindcss/vite resolves a different Vite type version than the one
+    // Astro bundles, which trips `astro check` with a spurious mismatch. Runtime is fine.
+    plugins: [/** @type {any} */ (tailwindcss())],
   },
 });
