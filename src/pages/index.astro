@@ -155,12 +155,23 @@ const faqs = [
         </h1>
 
         <p class="mt-8 max-w-2xl text-lead font-semibold text-chalk rise" style="animation-delay:.13s">
-          Not another AI assistant. forward.army is the platform that engineers a
-          purpose-built agent for each of your use cases — and runs it inside
-          your business, governed and only where you allow it.
+          We build custom AI agents that do real work inside your company — and
+          never anything risky without your approval.
         </p>
 
-        <div class="mt-11 flex flex-wrap items-center gap-4 rise" style="animation-delay:.20s">
+        <ul class="mt-6 flex flex-wrap gap-2.5 rise" style="animation-delay:.17s" aria-label="Examples of what an agent does">
+          {['Review & fix code', 'Triage support tickets', 'Keep docs current', 'Process invoices'].map((x) => (
+            <li class="mono-label border border-[var(--edge-on-ink)] px-3 py-1.5 text-field-soft">{x}</li>
+          ))}
+        </ul>
+
+        <p class="mt-6 max-w-2xl text-base leading-relaxed text-field-soft rise" style="animation-delay:.21s">
+          Each agent is engineered for one specific job, wired into your tools
+          like Slack and GitHub, and run on your own infrastructure. Not another
+          AI assistant — a colleague you can put on the work.
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4 rise" style="animation-delay:.28s">
           <a
             href="#request-form"
             class="group inline-flex items-center gap-3 bg-signal px-6 py-3.5 font-display text-lg font-bold text-ink transition-colors hover:bg-chalk hover:text-ink"
@@ -169,15 +180,15 @@ const faqs = [
             <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
           </a>
           <a
-            href="#doctrine"
+            href="#how"
             class="group inline-flex items-center gap-3 border border-[var(--edge-on-ink)] px-6 py-3.5 font-display text-lg font-bold text-chalk transition-colors hover:border-chalk"
           >
-            Read the doctrine
+            See how it works
           </a>
         </div>
 
         <!-- tactical spec strip -->
-        <dl class="mt-16 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-6 border-t border-[var(--edge-on-ink)] pt-8 sm:grid-cols-3 rise" style="animation-delay:.32s">
+        <dl class="mt-16 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-6 border-t border-[var(--edge-on-ink)] pt-8 sm:grid-cols-3 rise" style="animation-delay:.36s">
           {[
             ['Access model', 'Granted · scoped · revocable'],
             ['Autonomy', 'Supervised, gated on approval'],
