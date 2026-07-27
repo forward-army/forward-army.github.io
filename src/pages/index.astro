@@ -1,621 +1,305 @@
 ---
+// Redesign v2 — dark pine-green homepage. Ported from the Claude Design file
+// "Forward Army Redesign v2.dc.html": DC templating (sc-for/sc-if/{{}}) converted
+// to Astro, <image-slot> mapped to the founder photo/monogram pattern,
+// style-hover -> scoped CSS, plus responsive stacking. Departs from DESIGN.md by
+// explicit request; kept self-contained (own nav/footer) so the theme is isolated.
 import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Chevron from '../components/Chevron.astro';
-import Icon from '../components/Icon.astro';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/ibm-plex-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
 
-const loop = [
-  {
-    idx: '01',
-    verb: 'Inspect',
-    lede: 'It learns your ground.',
-    body: 'A forward-deployed agent reads your codebase, docs, tickets, and telemetry through access you grant — building a real map of how the business actually runs, not a generic guess.',
-  },
-  {
-    idx: '02',
-    verb: 'Propose',
-    lede: 'It briefs you first.',
-    body: 'Before touching anything, the agent returns proposals: what to build, what it will cost, what could break. You read the brief and decide. Nothing ships without your word.',
-  },
-  {
-    idx: '03',
-    verb: 'Implement',
-    lede: 'It executes on command.',
-    body: 'Approve a proposal and the agent does the work — opening reviewable changes inside your workflow, with every action logged. Advance your own ideas the same way.',
-  },
-];
+const DISPLAY = "'Space Grotesk Variable', 'Space Grotesk', sans-serif";
+const SANS = "'IBM Plex Sans Variable', 'IBM Plex Sans', Helvetica, sans-serif";
+const MONO = "'IBM Plex Mono', ui-monospace, monospace";
 
-const how = [
-  {
-    t: 'Your ground, or ours',
-    d: 'Run the agent — and the AI models it runs on — inside your own infrastructure, up to fully on-premise and air-gapped, so no data ever leaves your walls. Prefer managed? Use a dedicated, isolated account on our platform instead. Either way, you own where it runs; our engineers help you stand it up.',
-  },
-  {
-    t: 'Engineered for the job, not prompted',
-    d: 'Each agent is implemented for your specific use case. Wherever a step can be deterministic code instead of a model call, it is — which lifts success rates, makes the whole thing testable, and shrinks the model’s degrees of freedom. The LLM is used where it earns its place, not everywhere.',
-  },
-  {
-    t: 'Connectors to your world',
-    d: 'The agent plugs into your knowledge bases, tickets, and repositories to learn how the business actually runs, and talks to you like any other colleague — asking for access, explicitly, when the knowledge base points somewhere it cannot reach.',
-  },
-  {
-    t: 'Multi-model guardrails',
-    d: 'Before an action goes out, layered multi-model guardrails check it for correctness and likely failure modes — not a single model marking its own homework. Anything destructive still waits on your approval.',
-  },
-  {
-    t: 'Everything ships as PRs',
-    d: 'The agent works like a forward-deployed engineer: changes arrive as pull requests against your codebase. No infrastructure-as-code? Fine — we surface the same changes as approvals inside our platform.',
-  },
-];
+const title = 'forward.army — Custom AI agents that do real work. Under your command.';
+const description =
+  'Each forward-deployed agent is engineered for one job, wired into your tools, run on your infrastructure — and nothing risky ships without your approval.';
 
-const control = [
-  { t: 'Scoped', d: 'Access is granted and bounded — never standing.' },
-  { t: 'Audited', d: 'Every action is logged and attributable.' },
-  { t: 'Gated', d: 'Consequential steps wait for your sign-off.' },
-  { t: 'Revocable', d: 'Off the ground in one click — no residue.' },
-];
-
-const record = [
-  {
-    idx: 'R-01',
-    label: 'Research',
-    t: 'Published science, not press releases.',
-    d: 'Peer-reviewed work at top-tier venues — NeurIPS among them — and in leading journals. We deploy algorithms we understand to the metal, because we helped write the literature on them.',
-  },
-  {
-    idx: 'R-02',
-    label: 'Engineering',
-    t: 'Systems that hold at scale.',
-    d: 'Careers spent shipping AI-enabled applications, distributed systems, and highly scalable software in production — the unglamorous rigor that keeps things standing under real load.',
-  },
-  {
-    idx: 'R-03',
-    label: 'Platforms',
-    t: 'Custom-built for the ground.',
-    d: 'We build bespoke platforms around a domain instead of bending the domain to fit someone else’s tool. The agents run on infrastructure we designed for exactly this.',
-  },
-  {
-    idx: 'R-04',
-    label: 'Method',
-    t: 'State of the art, in production.',
-    d: 'We track the research edge and put it to work where it earns its place — measured against your outcomes, not a demo reel.',
-  },
-];
-
-// Ordered alphabetically by surname. Add each LinkedIn URL to show the link.
+// photo: drop a portrait in public/team/<file> and set the path to replace the monogram.
 const founders = [
-  {
-    name: 'Łukasz Augustyniak',
-    bio: 'NLP researcher focused on large language models and AI for legal work. Published across sentiment analysis, aspect extraction, and speech-recognition evaluation.',
-    scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en',
-    linkedin: 'https://www.linkedin.com/in/lukaszaugustyniak/',
-  },
-  {
-    name: 'Roman Bartusiak',
-    bio: 'ML engineer and researcher in NLP and machine learning. Full-stack software professional with deep expertise in distributed systems and applied AI.',
-    scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en',
-    linkedin: 'https://www.linkedin.com/in/romanbartusiak/',
-  },
-  {
-    name: 'Adrian Szymczak',
-    bio: 'AI solutions architect spanning large language models, data science, and software engineering. Published work on conversational-speech modeling and ASR-error robustness.',
-    scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en',
-    linkedin: 'https://www.linkedin.com/in/adrianszymczak/',
-  },
+  { name: 'Łukasz Augustyniak', role: 'CO-FOUNDER · NLP RESEARCH', photo: null, bio: 'NLP researcher focused on LLMs and AI for legal work. Published across sentiment analysis, aspect extraction, and speech-recognition evaluation.', scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/lukaszaugustyniak/' },
+  { name: 'Roman Bartusiak', role: 'CO-FOUNDER · ML ENGINEERING', photo: null, bio: 'ML engineer and researcher in NLP. Full-stack software professional with deep expertise in distributed systems and applied AI.', scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/romanbartusiak/' },
+  { name: 'Adrian Szymczak', role: 'CO-FOUNDER · AI ARCHITECTURE', photo: null, bio: 'AI solutions architect across LLMs, data science, and software engineering. Published on conversational-speech modeling and ASR-error robustness.', scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/adrianszymczak/' },
+];
+
+const hows = [
+  { num: '01', title: 'Your ground, or ours', body: 'Run the agent and its models on your infrastructure — up to fully air-gapped — or in a dedicated, isolated account on our platform. Either way, you own where it runs.' },
+  { num: '02', title: 'Deterministic where possible', body: 'Wherever a step can be code instead of a model call, it is. That lifts success rates, makes it testable, and shrinks the model’s degrees of freedom.' },
+  { num: '03', title: 'Connected to your tools', body: 'Plugs into your knowledge bases, tickets, and repos — and asks explicitly when it needs access it doesn’t have.' },
+  { num: '04', title: 'Multi-model guardrails', body: 'Layered checks review every action for correctness and failure modes — not a single model marking its own homework.' },
+  { num: '05', title: 'Everything ships as PRs', body: 'Changes arrive as pull requests against your codebase, or as approvals inside our platform if you have no infrastructure-as-code.' },
 ];
 
 const faqs = [
-  {
-    q: 'What can an agent actually touch?',
-    a: 'Only what you grant. Every capability is explicitly scoped and bounded — the same badge-and-scope you would give a trusted contractor. There is no standing access to everything, and nothing is touched until you approve the scope.',
-  },
-  {
-    q: 'How do I stop it?',
-    a: 'One click. Revoke access and the agent is off the ground instantly — no cleanup, no residue. Inspection runs on its own; any consequential action waits behind a sign-off you control.',
-  },
-  {
-    q: 'What if it gets something wrong?',
-    a: 'You see the brief before anything ships. Changes arrive as reviewable proposals inside your own workflow, every action is logged and attributable, and nothing consequential happens without your approval — so mistakes are caught at proposal time, not in production.',
-  },
-  {
-    q: 'Does our data ever leave our environment?',
-    a: 'Not unless you want it to. You can run the agent — and the AI models it uses — entirely on your own infrastructure, up to fully on-premise and air-gapped, so nothing leaves your network. Prefer managed hosting? It runs in a dedicated, fully isolated account — never shared with anyone else.',
-  },
-  {
-    q: 'Do we need engineers to run this?',
-    a: 'No. Our engineers help you build and deploy it — you bring a real problem and a scope you are comfortable granting, and you decide what ships. The platform is built for any team, not just technical ones.',
-  },
+  { q: 'What can an agent actually touch?', a: 'Only what you grant. Every capability is explicitly scoped and bounded — the same badge-and-scope you’d give a trusted contractor.' },
+  { q: 'How do I stop it?', a: 'One click. Revoke access and the agent is gone instantly — no cleanup, no residue.' },
+  { q: 'Does our data ever leave our environment?', a: 'Not unless you want it to. Run everything on-premise and air-gapped, or in a dedicated isolated account — never shared.' },
+  { q: 'Do we need engineers to run this?', a: 'No. Our engineers help you build and deploy it. You bring a real problem and decide what ships.' },
 ];
 ---
-<Base>
-  <Header />
+<Base title={title} description={description}>
+  <div class="dsx-root" style={`font-family: ${SANS}; color: #e8eee9; font-size: 16px; line-height: 1.55; background: #0f1712;`}>
 
-  <main id="main">
-    <!-- ============================= HERO ============================= -->
-    <section
-      aria-label="Introduction"
-      class="relative overflow-hidden bg-ink text-chalk"
-    >
-      <div class="grid-ticks pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
-
-      <div class="brief-shell relative pt-16 pb-20 sm:pt-24 sm:pb-28">
-        <div class="flex items-center gap-4 rise" style="animation-delay:.02s">
-          <span class="mono-label text-field-soft">01 / Deployment brief</span>
-          <span class="h-px flex-1 bg-[var(--edge-on-ink)]"></span>
-          <span class="mono-label inline-flex items-center gap-2 text-signal">
-            <span class="inline-block h-1.5 w-1.5 rounded-full bg-signal"></span>
-            Accepting new deployments
-          </span>
-        </div>
-
-        <h1 class="mt-10 max-w-[16ch] text-hero font-extrabold text-chalk rise" style="animation-delay:.08s">
-          Forward-deployed agents.
-          <span class="text-signal">Under your command.</span>
-        </h1>
-
-        <p class="mt-8 max-w-2xl text-lead font-semibold text-chalk rise" style="animation-delay:.13s">
-          A platform for building custom AI agents that do real work inside your
-          company — with our engineers to help you design and deploy them.
-        </p>
-
-        <ul class="mt-6 flex flex-wrap gap-2.5 rise" style="animation-delay:.17s" aria-label="Examples of what an agent does">
-          {['Review & fix code', 'Triage support tickets', 'Keep docs current', 'Process invoices'].map((x) => (
-            <li class="mono-label border border-[var(--edge-on-ink)] px-3 py-1.5 text-field-soft">{x}</li>
-          ))}
-        </ul>
-
-        <p class="mt-6 max-w-2xl text-base leading-relaxed text-field-soft rise" style="animation-delay:.21s">
-          Each agent is engineered for one specific job, wired into your tools
-          like Slack and GitHub, and run on your own infrastructure. Not another
-          AI assistant — a colleague you can put on the work, and nothing risky
-          ships without your approval.
-        </p>
-
-        <div class="mt-10 flex flex-wrap items-center gap-4 rise" style="animation-delay:.28s">
-          <a
-            href="#request-form"
-            class="group inline-flex items-center gap-3 bg-signal px-6 py-3.5 font-display text-lg font-bold text-ink transition-colors hover:bg-chalk hover:text-ink"
-          >
-            Request access
-            <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
-          </a>
-          <a
-            href="#how"
-            class="group inline-flex items-center gap-3 border border-[var(--edge-on-ink)] px-6 py-3.5 font-display text-lg font-bold text-chalk transition-colors hover:border-chalk"
-          >
-            See how it works
-          </a>
-        </div>
-
-        <!-- tactical spec strip -->
-        <dl class="mt-16 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-6 border-t border-[var(--edge-on-ink)] pt-8 sm:grid-cols-3 rise" style="animation-delay:.36s">
-          {[
-            ['Access model', 'Granted · scoped · revocable'],
-            ['Autonomy', 'Supervised, gated on approval'],
-            ['Built for', 'Any business, any team'],
-          ].map(([k, v]) => (
-            <div>
-              <dt class="mono-label text-field-soft">{k}</dt>
-              <dd class="mt-2 font-display text-lg font-bold text-chalk">{v}</dd>
-            </div>
-          ))}
-        </dl>
+    <!-- NAV -->
+    <nav class="dsx-pad" style="position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 14px 40px; background: rgba(15,23,18,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid #1f2c24;">
+      <div style={`font-family: ${DISPLAY}; font-weight: 700; font-size: 17px; letter-spacing: -0.02em;`}>forward<span style="color: #2f9e69;">.army</span></div>
+      <div class="dsx-navlinks" style="display: flex; align-items: center; gap: 28px; font-size: 14px; font-weight: 500;">
+        <a href="#team" class="dsx-navlink" style="color: #9fb0a5;">Team</a>
+        <a href="#loop" class="dsx-navlink" style="color: #9fb0a5;">The loop</a>
+        <a href="#how" class="dsx-navlink" style="color: #9fb0a5;">How it works</a>
+        <a href="#faq" class="dsx-navlink" style="color: #9fb0a5;">Questions</a>
       </div>
-    </section>
+      <a href="#cta" class="dsx-navcta" style="background: #2f9e69; color: #08130c; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 14px;">Request access</a>
+    </nav>
 
-    <!-- ============================ DOCTRINE ========================== -->
-    <section id="doctrine" aria-labelledby="doctrine-h" class="bg-bone">
-      <div class="brief-shell grid gap-x-16 gap-y-10 py-24 md:grid-cols-[1.1fr_1fr]">
+    <main id="main">
+    <!-- HERO -->
+    <header class="dsx-pad" style="padding: 88px 40px 64px; border-bottom: 1px solid #1f2c24; background: radial-gradient(900px 500px at 75% -10%, #16241c 0%, #0f1712 60%);">
+      <div class="dsx-hero-grid" style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: center;">
         <div>
-          <span class="mono-label text-signal-deep">02 / Doctrine</span>
-          <h2 id="doctrine-h" class="mt-6 text-h2 text-ink">
-            Trust is earned<br />on the ground.
-          </h2>
-        </div>
-        <div class="reveal max-w-xl space-y-6 text-lead text-field md:pt-14">
-          <p>
-            A demo never changed a company. Embedding did. Sit a capable
-            expert next to the problem, give them real access, and let them
-            learn the terrain — that is how technology crosses from
-            <span class="text-ink">interesting</span> to
-            <span class="text-ink">operational</span>.
-          </p>
-          <p>
-            We run that model both ways. Our engineers deploy forward into your
-            team. And we are building the platform that lets
-            <span class="text-ink">agents</span> deploy forward too — with the
-            same discipline of access, and the same answer to the only question
-            that matters: <span class="text-ink">who is in command?</span>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================== LOOP ============================ -->
-    <section id="loop" aria-labelledby="loop-h" class="border-t border-[var(--edge)] bg-bone-sink">
-      <div class="brief-shell py-24">
-        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <span class="mono-label text-signal-deep">03 / The loop</span>
-            <h2 id="loop-h" class="mt-6 text-h2 text-ink">Inspect. Propose. Implement.</h2>
+          <div style={`display: inline-flex; align-items: center; gap: 8px; font-family: ${MONO}; font-size: 12px; color: #8fb8a2; border: 1px solid #2b3a31; border-radius: 999px; padding: 6px 14px; margin-bottom: 28px;`}>
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>
+            Accepting new deployments
           </div>
-          <p class="max-w-sm text-field">
-            The loop a good hire runs in their first month — now available as
-            supervised autonomy.
-          </p>
-        </div>
-
-        <!-- Animated rail (desktop): a signal line draws through 01 → 02 → 03,
-             lighting each node as it arrives. Decorative — numbers repeat in
-             the content for mobile/AT. -->
-        <div
-          class="mt-16 hidden items-center gap-5 md:flex"
-          data-loop
-          aria-hidden="true"
-        >
-          {loop.map((step, i) => (
-            <>
-              <span
-                class="loop-node font-mono text-3xl font-medium leading-none"
-                style={`--d:${(i * 0.65).toFixed(2)}s`}
-              >
-                {step.idx}
-              </span>
-              {i < 2 && (
-                <span class="loop-seg flex-1">
-                  <span class="loop-fill" style={`--d:${(i * 0.65 + 0.15).toFixed(2)}s`}></span>
-                </span>
-              )}
-            </>
-          ))}
-        </div>
-
-        <!-- Numbered sequence, divided by rules (not identical cards) -->
-        <ol class="mt-10 grid gap-y-12 md:grid-cols-3 md:gap-y-0">
-          {loop.map((step, i) => (
-            <li
-              class={`reveal relative ${i > 0 ? 'md:border-l md:border-[var(--edge-strong)] md:pl-10' : 'md:pr-10'} ${i === 1 ? 'md:px-10' : ''}`}
-              style={`--reveal-delay:${(i * 0.12).toFixed(2)}s`}
-            >
-              <span class="font-mono text-2xl font-medium leading-none text-signal-deep md:hidden">
-                {step.idx}
-              </span>
-              <h3 class="mt-4 text-h3 text-ink md:mt-0">{step.verb}</h3>
-              <p class="mt-1 font-display text-lg font-bold text-signal-deep">{step.lede}</p>
-              <p class="mt-4 max-w-sm text-field">{step.body}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============================= HOW ============================= -->
-    <section id="how" aria-labelledby="how-h" class="border-t border-[var(--edge)] bg-bone">
-      <div class="brief-shell py-24">
-        <div class="grid gap-x-16 gap-y-8 md:grid-cols-2 md:items-end">
-          <div class="reveal">
-            <span class="mono-label text-signal-deep">04 / How it works</span>
-            <h2 id="how-h" class="mt-6 text-h2 text-ink">
-              How a forward<br />agent operates.
-            </h2>
+          <h1 style={`font-family: ${DISPLAY}; font-size: 56px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 700; margin: 0 0 20px; text-wrap: balance;`}>Custom AI agents that do real work. Under your command.</h1>
+          <p style="font-size: 18px; color: #9fb0a5; max-width: 480px; margin: 0 0 32px; text-wrap: pretty;">Each agent is engineered for one job, wired into your tools, run on your infrastructure — and nothing risky ships without your approval.</p>
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <a href="#cta" class="dsx-btn" style="background: #2f9e69; color: #08130c; padding: 13px 26px; border-radius: 7px; font-weight: 600; font-size: 15px;">Request access</a>
+            <a href="#loop" class="dsx-btn-ghost" style="color: #cfdad3; padding: 13px 22px; border-radius: 7px; border: 1px solid #2b3a31; font-weight: 500; font-size: 15px;">See how it works</a>
           </div>
-          <p class="reveal max-w-xl text-lead text-field">
-            Not a chatbot bolted onto your data. An operator engineered around
-            your specific use case, running on your infrastructure or ours —
-            with a hard rule: nothing risky happens without your say-so.
-          </p>
         </div>
-
-        <ol class="reveal mt-16 grid gap-x-12 gap-y-10 sm:grid-cols-2">
-          {how.map((item, i) => (
-            <li class="border-t border-[var(--edge-strong)] pt-6">
-              <div class="flex items-baseline gap-3">
-                <span class="font-mono text-sm font-medium text-signal-deep">{`0${i + 1}`}</span>
-                <h3 class="font-display text-h3 font-bold text-ink">{item.t}</h3>
-              </div>
-              <p class="mt-3 text-field">{item.d}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============================ COMMAND =========================== -->
-    <section id="command" aria-labelledby="command-h" class="relative overflow-hidden bg-ink text-chalk">
-      <div class="grid-ticks pointer-events-none absolute inset-0 opacity-50" aria-hidden="true"></div>
-      <div class="brief-shell relative grid gap-x-16 gap-y-12 py-24 md:grid-cols-[0.85fr_1.15fr]">
-        <div class="md:sticky md:top-24 md:self-start">
-          <span class="mono-label text-signal">05 / Command &amp; control</span>
-          <h2 id="command-h" class="mt-6 text-h2 text-chalk">
-            Autonomy you<br />can pull back.
-          </h2>
-          <p class="mt-6 max-w-md text-lead text-field-soft">
-            The differentiator isn't that the agents are capable. It's that
-            you stay in command of everything they can reach and everything
-            they do.
-          </p>
-          <a
-            href="#request-form"
-            class="group mt-8 inline-flex items-center gap-2.5 font-display text-lg font-bold text-signal transition-colors hover:text-chalk"
-          >
-            Put an agent under command
-            <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
-          </a>
-        </div>
-
-        <!-- Tight control readout — reinforces command without repeating How -->
-        <ul class="reveal space-y-6 border-t border-[var(--edge-on-ink)] pt-9">
-          {control.map((c) => (
-            <li class="flex items-baseline gap-4 border-b border-[var(--edge-on-ink)] pb-6">
-              <Chevron count={1} strokeWidth={7} class="h-3.5 w-auto shrink-0 translate-y-1 text-signal" />
-              <p class="text-lead">
-                <span class="font-display font-bold text-chalk">{c.t}.</span>
-                <span class="text-field-soft"> {c.d}</span>
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <!-- ============================ PEOPLE =========================== -->
-    <section id="team" aria-labelledby="team-h" class="border-t border-[var(--edge)] bg-bone-sink">
-      <div class="brief-shell py-24">
-        <div class="grid gap-x-16 gap-y-8 md:grid-cols-[1.1fr_1fr] md:items-end">
-          <div>
-            <span class="mono-label text-signal-deep">06 / Service record</span>
-            <h2 id="team-h" class="mt-6 text-h2 text-ink">
-              Not just agents.<br />The people who deploy them.
-            </h2>
+        <div style={`background: #0b110d; border: 1px solid #26332b; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.5); font-family: ${MONO}; font-size: 12.5px;`}>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid #26332b; color: #6e8377;">
+            <span>agent/invoice-ops — activity</span>
+            <span style="color: #4ade80;">● live</span>
           </div>
-          <p class="max-w-xl text-lead text-field">
-            Every forward-deployed agent is designed, governed, and backed by a
-            team that has spent careers at the frontier of AI research and
-            large-scale software.
-          </p>
-        </div>
-
-        <dl class="reveal mt-14 grid grid-cols-2 gap-x-8 gap-y-6 border-y border-[var(--edge-strong)] py-8 sm:grid-cols-3">
-          {[
-            ['Peer-reviewed citations', '820+'],
-            ['Published at', 'ACL · EMNLP · NeurIPS'],
-            ['Publishing since', '2014'],
-          ].map(([k, v]) => (
-            <div>
-              <dt class="mono-label text-field">{k}</dt>
-              <dd class="mt-2 font-display text-lg font-bold text-ink">{v}</dd>
+          <div class="dsx-feed" style="padding: 18px; display: flex; flex-direction: column; gap: 12px; line-height: 1.5;">
+            <div style="animation: dsxfeedIn 0.4s ease both;"><span style="color: #57695f;">09:41</span> <span style="color: #8fb8a2;">inspect</span> <span style="color: #c4cec8;">read 214 invoices from NetSuite · flagged 3 mismatches</span></div>
+            <div style="animation: dsxfeedIn 0.4s 0.15s ease both;"><span style="color: #57695f;">09:44</span> <span style="color: #e2b45a;">propose</span> <span style="color: #c4cec8;">brief #128 — reconcile vendor duplicates, est. 2h saved/wk</span></div>
+            <div style="animation: dsxfeedIn 0.4s 0.3s ease both; display: flex; align-items: center; gap: 10px; background: #16241c; border: 1px solid #2b3a31; border-radius: 8px; padding: 10px 14px;">
+              <span style="color: #e2b45a;">⏸ awaiting your approval</span>
+              <span style="margin-left: auto; background: #2f9e69; color: #08130c; padding: 3px 10px; border-radius: 5px; font-weight: 500;">Approve</span>
+              <span style="border: 1px solid #3a4a40; color: #9fada4; padding: 3px 10px; border-radius: 5px;">Decline</span>
             </div>
-          ))}
-        </dl>
-
-        <dl class="mt-16 border-t border-[var(--edge-strong)]">
-          {record.map((r) => (
-            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
-              <dt class="contents">
-                <span class="flex items-center gap-3">
-                  <span class="font-mono text-sm font-medium text-signal-deep">{r.idx}</span>
-                  <span class="mono-label text-field">{r.label}</span>
-                </span>
-                <span class="font-display text-h3 font-bold text-ink">{r.t}</span>
-              </dt>
-              <dd class="text-field">{r.d}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <!-- Founders — named, verifiable proof -->
-        <div class="reveal mt-16">
-          <span class="mono-label text-field">Signed by — founders</span>
-          <ul class="mt-6 grid gap-px overflow-hidden border border-[var(--edge)] bg-[var(--edge)] sm:grid-cols-3">
-            {founders.map((f) => (
-              <li class="flex flex-col gap-4 bg-bone-sink p-7">
-                <h3 class="text-h3 font-bold text-ink">{f.name}</h3>
-                <p class="text-sm leading-relaxed text-field">{f.bio}</p>
-                <div class="mt-auto flex items-center gap-3 pt-2">
-                  <a
-                    href={f.scholar}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex h-10 w-10 items-center justify-center border border-[var(--edge-strong)] text-field transition-colors hover:border-signal-deep hover:text-signal-deep"
-                    aria-label={`${f.name} — Google Scholar publications (opens in a new tab)`}
-                  >
-                    <Icon name="scholar" class="h-5 w-5" />
-                  </a>
-                  {f.linkedin && (
-                    <a
-                      href={f.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex h-10 w-10 items-center justify-center border border-[var(--edge-strong)] text-field transition-colors hover:border-signal-deep hover:text-signal-deep"
-                      aria-label={`${f.name} — LinkedIn profile (opens in a new tab)`}
-                    >
-                      <Icon name="linkedin" class="h-[1.15rem] w-[1.15rem]" />
-                    </a>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+            <div style="animation: dsxfeedIn 0.4s 0.45s ease both;"><span style="color: #57695f;">09:52</span> <span style="color: #6ea8ff;">implement</span> <span style="color: #c4cec8;">PR #412 opened — every action logged</span></div>
+            <div style="color: #57695f;">▮<span class="dsx-blink">&nbsp;</span></div>
+          </div>
         </div>
       </div>
-    </section>
-
-    <!-- ============================== FAQ ============================ -->
-    <section id="faq" aria-labelledby="faq-h" class="relative overflow-hidden bg-ink text-chalk">
-      <div class="grid-ticks pointer-events-none absolute inset-0 opacity-50" aria-hidden="true"></div>
-      <div class="brief-shell relative grid gap-x-16 gap-y-12 py-24 md:grid-cols-[0.85fr_1.15fr]">
-        <div class="reveal md:sticky md:top-24 md:self-start">
-          <span class="mono-label text-signal">07 / Field questions</span>
-          <h2 id="faq-h" class="mt-6 text-h2 text-chalk">
-            The questions<br />worth asking first.
-          </h2>
-          <p class="mt-6 max-w-md text-lead text-field-soft">
-            The honest answers to what every operator asks before letting an
-            agent onto the ground.
-          </p>
-        </div>
-
-        <div class="reveal border-t border-[var(--edge-on-ink)]">
-          {faqs.map((item, i) => (
-            <details class="group border-b border-[var(--edge-on-ink)]">
-              <summary class="flex cursor-pointer list-none items-center gap-4 py-6 [&::-webkit-details-marker]:hidden">
-                <span class="font-mono text-sm font-medium text-signal">{`Q-0${i + 1}`}</span>
-                <span class="flex-1 font-display text-xl font-bold text-chalk">{item.q}</span>
-                <Chevron
-                  count={1}
-                  strokeWidth={6}
-                  class="faq-chevron h-4 w-auto shrink-0 text-signal transition-transform duration-300"
-                />
-              </summary>
-              <p class="max-w-2xl pb-6 pl-[calc(2.5rem+1ch)] text-field-soft">{item.a}</p>
-            </details>
-          ))}
-        </div>
+      <!-- STAT STRIP -->
+      <div class="dsx-stat-strip" style="max-width: 1160px; margin: 64px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #26332b; border: 1px solid #26332b; border-radius: 10px; overflow: hidden;">
+        <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>820+</div><div style="font-size: 13px; color: #8a988f;">peer-reviewed citations</div></div>
+        <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>NeurIPS · ACL</div><div style="font-size: 13px; color: #8a988f;">published at top venues</div></div>
+        <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>On-prem</div><div style="font-size: 13px; color: #8a988f;">up to fully air-gapped</div></div>
+        <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>1-click</div><div style="font-size: 13px; color: #8a988f;">revocable access</div></div>
       </div>
-    </section>
+    </header>
 
-    <!-- ============================= DEPLOY =========================== -->
-    <section id="deploy" aria-labelledby="deploy-h" class="border-t border-[var(--edge)] bg-signal text-ink">
-      <div class="brief-shell grid gap-x-16 gap-y-12 py-24 md:grid-cols-[1fr_1fr] md:items-start">
-        <div class="md:pt-4">
-          <span class="mono-label text-ink">08 / Request access</span>
-          <h2 id="deploy-h" class="mt-6 text-h2 text-ink">
-            Give one agent a<br />bounded piece of ground.
-          </h2>
-          <p class="mt-6 max-w-xl text-lead text-ink">
-            Start with one bounded deployment. Bring a real problem and a scope
-            you're comfortable granting — we'll help you build and deploy it,
-            brief you, and you decide what ships.
-          </p>
-
-          <ul class="mt-10 space-y-3">
-            {[
-              'No access is granted until you say so.',
-              'Everything the agent does is logged and reversible.',
-              'Reply within one business day.',
-            ].map((point) => (
-              <li class="flex items-start gap-3 text-ink">
-                <Chevron count={1} strokeWidth={7} class="mt-1.5 h-3 w-auto shrink-0" />
-                <span class="font-medium">{point}</span>
-              </li>
-            ))}
-          </ul>
+    <!-- TEAM -->
+    <section id="team" class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24;">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>02 / The team</div>
+        <div class="dsx-team-head" style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; margin-bottom: 48px;">
+          <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0; text-wrap: balance;`}>Built by the people who wrote the research.</h2>
+          <p style="color: #9fb0a5; margin: 0;">Every agent is designed, governed, and backed by founders with careers at the frontier of NLP research and large-scale software — 820+ citations, publishing since 2014.</p>
         </div>
-
-        <!-- Request-access form on an ink card (focal, high contrast) -->
-        <div id="request-form" class="reveal scroll-mt-24 bg-ink p-7 text-chalk sm:p-9" style="--reveal-delay:.1s">
-          <form id="access-form" class="space-y-5" novalidate>
-            <p class="mono-label text-field-soft">Request access</p>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-              <div class="flex flex-col gap-2">
-                <label for="f-name" class="mono-label text-field-soft">Name</label>
-                <input id="f-name" name="name" type="text" autocomplete="name" required
-                  class="rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
-                  placeholder="Jane Rivera" />
+        <div class="dsx-team-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          {founders.map((f) => (
+            <div class="dsx-teamcard" style="background: #131e17; border: 1px solid #26332b; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+              <div style="width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: #0b110d; border: 1px solid #26332b; display: flex; align-items: center; justify-content: center; flex: none;">
+                {f.photo ? (
+                  <img src={f.photo} alt={`${f.name}, forward.army co-founder`} width="96" height="96" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1);" />
+                ) : (
+                  <span aria-hidden="true" style={`font-family: ${DISPLAY}; font-weight: 700; font-size: 26px; color: #4a5f53;`}>{f.name.split(' ').map((w) => w[0]).join('')}</span>
+                )}
               </div>
-              <div class="flex flex-col gap-2">
-                <label for="f-company" class="mono-label text-field-soft">Company</label>
-                <input id="f-company" name="company" type="text" autocomplete="organization" required
-                  class="rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
-                  placeholder="Acme Corp" />
+              <div>
+                <h3 style={`font-family: ${DISPLAY}; font-size: 20px; margin: 0 0 6px;`}>{f.name}</h3>
+                <div style={`font-family: ${MONO}; font-size: 12px; color: #8fb8a2; margin-bottom: 10px;`}>{f.role}</div>
+                <p style="margin: 0; font-size: 14px; color: #9fb0a5;">{f.bio}</p>
+              </div>
+              <div style="display: flex; gap: 14px; font-size: 13.5px; font-weight: 500; margin-top: auto;">
+                <a href={f.scholar} target="_blank" rel="noopener noreferrer">Google Scholar ↗</a>
+                <a href={f.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
-            <div class="flex flex-col gap-2">
-              <label for="f-email" class="mono-label text-field-soft">Work email</label>
-              <input id="f-email" name="email" type="email" autocomplete="email" required
-                class="rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
-                placeholder="jane@acme.com" />
+    <!-- THE LOOP -->
+    <section id="loop" class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24; background: #0b110d;">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>03 / The loop</div>
+        <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 12px;`}>Inspect. Propose. Implement.</h2>
+        <p style="color: #9fb0a5; max-width: 560px; margin: 0 0 56px;">The loop a good hire runs in their first month — as supervised autonomy.</p>
+        <div class="dsx-loop" style="display: grid; grid-template-columns: 1fr 56px 1fr 56px 1fr; align-items: stretch; gap: 0; margin-bottom: 20px;">
+          <div style="background: #131e17; border: 1px solid #2b3a31; border-radius: 12px; padding: 28px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <span style="width: 10px; height: 10px; background: #8fb8a2; border-radius: 2px; display: inline-block;"></span>
+              <span style={`font-family: ${MONO}; font-size: 12px; color: #8fb8a2;`}>01 · READ-ONLY</span>
             </div>
-
-            <div class="flex flex-col gap-2">
-              <label for="f-usecase" class="mono-label text-field-soft">What would you deploy an agent on?</label>
-              <textarea id="f-usecase" name="usecase" rows="3" required
-                class="resize-y rounded-none border border-[var(--edge-on-ink)] bg-ink-raise px-4 py-3 text-chalk placeholder:text-field-soft focus:border-signal"
-                placeholder="One workflow, system, or question you'd start with."></textarea>
+            <h3 style={`font-family: ${DISPLAY}; font-size: 20px; margin: 0 0 8px;`}>Inspect</h3>
+            <p style="margin: 0; font-size: 14.5px; color: #9fb0a5;">Reads your codebase, docs, and tickets through access you grant — building a real map of how the business runs.</p>
+          </div>
+          <div class="dsx-arrow" style="display: flex; align-items: center; justify-content: center; color: #4a5f53; font-size: 22px;">→</div>
+          <div style="background: #131e17; border: 1px solid #4a3d1f; border-radius: 12px; padding: 28px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <span style="width: 10px; height: 10px; background: #e2b45a; border-radius: 2px; display: inline-block;"></span>
+              <span style={`font-family: ${MONO}; font-size: 12px; color: #e2b45a;`}>02 · YOU DECIDE</span>
             </div>
-
-            <!-- Honeypot: hidden from humans, catches bots -->
-            <div class="hidden" aria-hidden="true">
-              <label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+            <h3 style={`font-family: ${DISPLAY}; font-size: 20px; margin: 0 0 8px;`}>Propose</h3>
+            <p style="margin: 0; font-size: 14.5px; color: #9fb0a5;">Briefs you before touching anything: what to build, what it costs, what could break. Nothing ships without your word.</p>
+          </div>
+          <div class="dsx-arrow" style="display: flex; align-items: center; justify-content: center; color: #4a5f53; font-size: 22px;">→</div>
+          <div style="background: #131e17; border: 1px solid #2b5a41; border-radius: 12px; padding: 28px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <span style="width: 10px; height: 10px; background: #2f9e69; border-radius: 2px; display: inline-block;"></span>
+              <span style={`font-family: ${MONO}; font-size: 12px; color: #57c78f;`}>03 · ON COMMAND</span>
             </div>
+            <h3 style={`font-family: ${DISPLAY}; font-size: 20px; margin: 0 0 8px;`}>Implement</h3>
+            <p style="margin: 0; font-size: 14.5px; color: #9fb0a5;">Approve and it executes — reviewable pull requests inside your workflow, every action logged.</p>
+          </div>
+        </div>
+        <div style={`display: flex; align-items: center; gap: 12px; font-family: ${MONO}; font-size: 12px; color: #57695f;`}>
+          <span style="flex: 1; border-bottom: 1px dashed #2b3a31;"></span>
+          <span>↺ the loop repeats — each pass earns more trust</span>
+          <span style="flex: 1; border-bottom: 1px dashed #2b3a31;"></span>
+        </div>
+      </div>
+    </section>
 
-            <button type="submit"
-              class="group inline-flex w-full items-center justify-center gap-3 bg-signal px-6 py-4 font-display text-lg font-bold text-ink transition-colors hover:bg-chalk hover:text-ink sm:w-auto">
-              <span data-label>Request access</span>
-              <Chevron count={2} strokeWidth={6} class="chev-advance h-4 w-auto" />
-            </button>
-          </form>
-
-          <!-- Live region: status, success, error -->
-          <p id="form-status" class="mt-4 text-sm text-field-soft" role="status" aria-live="polite"></p>
-
-          <div id="form-success" hidden class="border-l-2 border-signal pl-5">
-            <p class="font-display text-xl font-bold text-chalk">Request received.</p>
-            <p class="mt-2 text-field-soft">
-              We'll reply within one business day with next steps. Nothing is
-              accessed until you grant it.
-            </p>
+    <!-- COMMAND & CONTROL -->
+    <section class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24;">
+      <div class="dsx-cmd-grid" style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+        <div>
+          <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>04 / Command &amp; control</div>
+          <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 16px;`}>Autonomy you can pull back.</h2>
+          <p style="color: #9fb0a5; margin: 0 0 32px;">The differentiator isn’t capability — it’s that you stay in command of everything the agent can reach and everything it does.</p>
+          <div class="dsx-cmd-controls" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div style="border: 1px solid #26332b; border-radius: 10px; padding: 16px 18px; background: #131e17;"><strong style={`font-family: ${DISPLAY};`}>Scoped</strong><div style="font-size: 13.5px; color: #9fb0a5;">Access granted and bounded — never standing.</div></div>
+            <div style="border: 1px solid #26332b; border-radius: 10px; padding: 16px 18px; background: #131e17;"><strong style={`font-family: ${DISPLAY};`}>Audited</strong><div style="font-size: 13.5px; color: #9fb0a5;">Every action logged and attributable.</div></div>
+            <div style="border: 1px solid #26332b; border-radius: 10px; padding: 16px 18px; background: #131e17;"><strong style={`font-family: ${DISPLAY};`}>Gated</strong><div style="font-size: 13.5px; color: #9fb0a5;">Consequential steps wait for your sign-off.</div></div>
+            <div style="border: 1px solid #26332b; border-radius: 10px; padding: 16px 18px; background: #131e17;"><strong style={`font-family: ${DISPLAY};`}>Revocable</strong><div style="font-size: 13.5px; color: #9fb0a5;">Off the ground in one click — no residue.</div></div>
+          </div>
+        </div>
+        <div style="background: #131e17; border: 1px solid #26332b; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); overflow: hidden;">
+          <div style="padding: 16px 22px; border-bottom: 1px solid #1f2c24; display: flex; align-items: center; justify-content: space-between;">
+            <span style={`font-family: ${MONO}; font-size: 12px; color: #6e8377;`}>Brief #128 · agent/invoice-ops</span>
+            <span style="font-size: 12px; font-weight: 600; color: #e2b45a; background: #2a2415; border-radius: 999px; padding: 4px 12px;">Awaiting approval</span>
+          </div>
+          <div style="padding: 22px;">
+            <h3 style={`font-family: ${DISPLAY}; font-size: 18px; margin: 0 0 8px;`}>Reconcile duplicate vendor records</h3>
+            <p style="font-size: 14px; color: #9fb0a5; margin: 0 0 18px;">Merge 17 duplicate vendors in NetSuite. Estimated 2h/week saved in AP triage. Risk: low — all merges reversible.</p>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; margin-bottom: 20px;">
+              <div style="display: flex; gap: 10px;"><span style="color: #57c78f;">✓</span> Scope: NetSuite vendor table, read + merge</div>
+              <div style="display: flex; gap: 10px;"><span style="color: #57c78f;">✓</span> Rollback plan attached</div>
+              <div style="display: flex; gap: 10px;"><span style="color: #57c78f;">✓</span> Guardrails passed 4/4 checks</div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <span style="background: #2f9e69; color: #08130c; padding: 10px 20px; border-radius: 7px; font-size: 14px; font-weight: 600;">Approve &amp; implement</span>
+              <span style="border: 1px solid #3a4a40; color: #9fada4; padding: 10px 20px; border-radius: 7px; font-size: 14px; font-weight: 500;">Request changes</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  </main>
 
-  <Footer />
+    <!-- HOW IT WORKS -->
+    <section id="how" class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24; background: #0b110d;">
+      <div style="max-width: 860px; margin: 0 auto;">
+        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>05 / How it works</div>
+        <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 44px;`}>Engineered, not prompted.</h2>
+        <div style="display: flex; flex-direction: column;">
+          {hows.map((h) => (
+            <div class="dsx-how-row" style="display: grid; grid-template-columns: 56px 240px 1fr; gap: 24px; padding: 22px 0; border-top: 1px solid #1f2c24; align-items: baseline;">
+              <div style={`font-family: ${MONO}; font-size: 13px; color: #57695f;`}>{h.num}</div>
+              <div style={`font-family: ${DISPLAY}; font-weight: 600; font-size: 16px;`}>{h.title}</div>
+              <div style="font-size: 14.5px; color: #9fb0a5;">{h.body}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24;">
+      <div style="max-width: 860px; margin: 0 auto;">
+        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>06 / Questions</div>
+        <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 36px;`}>Asked before every deployment.</h2>
+        <div style="display: flex; flex-direction: column;">
+          {faqs.map((q) => (
+            <div class="dsx-faq-row" style="border-top: 1px solid #1f2c24; padding: 20px 0; display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px;">
+              <div style={`font-family: ${DISPLAY}; font-weight: 600; font-size: 16px;`}>{q.q}</div>
+              <div style="font-size: 14.5px; color: #9fb0a5;">{q.a}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="dsx-pad" style="padding: 96px 40px; background: radial-gradient(700px 400px at 50% 120%, #16241c 0%, #0f1712 70%);">
+      <div style="max-width: 720px; margin: 0 auto; text-align: center;">
+        <h2 style={`font-family: ${DISPLAY}; font-size: 44px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 14px; text-wrap: balance;`}>Give one agent a bounded piece of ground.</h2>
+        <p style="color: #9fb0a5; margin: 0 0 32px;">Bring a real problem and a scope you’re comfortable granting. We help you build and deploy it — you decide what ships. Reply within one business day.</p>
+        <a href="mailto:command@forward.army" class="dsx-btn" style="display: inline-block; background: #2f9e69; color: #08130c; padding: 14px 32px; border-radius: 7px; font-weight: 600; font-size: 15px;">Request access</a>
+      </div>
+    </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dsx-pad" style="background: #0b110d; border-top: 1px solid #1f2c24; color: #6e8377; padding: 28px 40px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13px;">
+      <div style={`font-family: ${DISPLAY}; font-weight: 700; color: #cfdad3;`}>forward<span style="color: #2f9e69;">.army</span></div>
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <a href="#team" style="color: #6e8377;">Team</a>
+        <a href="#loop" style="color: #6e8377;">The loop</a>
+        <a href="#how" style="color: #6e8377;">How it works</a>
+        <a href="/use-cases" style="color: #6e8377;">Use cases</a>
+        <a href="/compare" style="color: #6e8377;">Compare</a>
+      </div>
+      <div>© 2026 forward.army — all units accounted for</div>
+    </footer>
+  </div>
+
+  <style is:global>
+    body { margin: 0; background: #0f1712 !important; }
+    .dsx-root { -webkit-font-smoothing: antialiased; }
+    .dsx-root a { color: #57c78f; text-decoration: none; }
+    .dsx-root a:hover { color: #7fdcab; text-decoration: underline; }
+    .dsx-root ::selection { background: #2b4a39; }
+
+    @keyframes dsxblink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes dsxfeedIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .dsx-blink { animation: dsxblink 1.1s infinite; }
+
+    /* hover states (ported from style-hover) */
+    .dsx-btn:hover { background: #3cb87c !important; color: #08130c !important; text-decoration: none; }
+    .dsx-btn-ghost:hover { border-color: #4a5f53 !important; color: #fff !important; text-decoration: none; }
+    .dsx-navlink:hover { color: #e8eee9 !important; text-decoration: none; }
+    .dsx-navcta:hover { background: #3cb87c !important; color: #08130c !important; text-decoration: none; }
+    .dsx-teamcard:hover { border-color: #3a4a40 !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dsx-feed div, .dsx-blink { animation: none !important; }
+    }
+
+    @media (max-width: 900px) {
+      .dsx-hero-grid, .dsx-team-head, .dsx-cmd-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+      .dsx-team-grid, .dsx-loop { grid-template-columns: 1fr !important; }
+      .dsx-arrow { display: none !important; }
+      .dsx-how-row { grid-template-columns: 56px 1fr !important; gap: 6px 20px !important; }
+      .dsx-faq-row { grid-template-columns: 1fr !important; gap: 8px !important; }
+    }
+    @media (max-width: 620px) {
+      .dsx-stat-strip { grid-template-columns: 1fr 1fr !important; }
+      .dsx-cmd-controls { grid-template-columns: 1fr !important; }
+      .dsx-navlinks { display: none !important; }
+      .dsx-pad { padding-left: 20px !important; padding-right: 20px !important; }
+    }
+  </style>
 </Base>
-
-<script>
-  const form = document.getElementById('access-form') as HTMLFormElement | null;
-  const statusEl = document.getElementById('form-status');
-  const successEl = document.getElementById('form-success');
-  const ENDPOINT = '/api/request-access';
-  const FALLBACK = 'command@forward.army';
-
-  if (form && statusEl && successEl) {
-    const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
-    const btnLabel = form.querySelector('[data-label]');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      statusEl.textContent = '';
-      statusEl.className = 'mt-4 text-sm text-field-soft';
-
-      // Honeypot + native validity
-      if ((form.elements.namedItem('website') as HTMLInputElement)?.value) return;
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
-      const data = Object.fromEntries(new FormData(form).entries());
-      btn.disabled = true;
-      if (btnLabel) btnLabel.textContent = 'Sending…';
-
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!res.ok) throw new Error(String(res.status));
-        form.hidden = true;
-        successEl.hidden = false;
-        (successEl.querySelector('p') as HTMLElement)?.focus?.();
-      } catch (err) {
-        btn.disabled = false;
-        if (btnLabel) btnLabel.textContent = 'Request access';
-        statusEl.className = 'mt-4 text-sm text-chalk';
-        statusEl.innerHTML =
-          'Could not send just now. Email us directly at ' +
-          '<a class="font-semibold text-signal underline" href="mailto:' +
-          FALLBACK +
-          '">' +
-          FALLBACK +
-          '</a>.';
-      }
-    });
-  }
-</script>
