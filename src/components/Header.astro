@@ -16,11 +16,11 @@ const nav = [
       <Logo accent="text-signal-deep" />
     </a>
 
-    <nav aria-label="Primary" class="hidden items-center gap-8 md:flex">
+    <nav aria-label="Primary" class="hidden items-center gap-8 lg:flex">
       {nav.map((item) => (
         <a
           href={item.href}
-          class="mono-label text-field transition-colors hover:text-ink focus-visible:text-ink"
+          class="mono-label whitespace-nowrap text-field transition-colors hover:text-ink focus-visible:text-ink"
         >
           {item.label}
         </a>
@@ -37,7 +37,7 @@ const nav = [
       </a>
 
       <!-- Mobile section menu — native <details>, no JS, keyboard-accessible -->
-      <details class="relative md:hidden [&_.bar]:open:opacity-0">
+      <details class="relative lg:hidden [&_.bar]:open:opacity-0">
         <summary
           class="flex h-9 w-9 cursor-pointer list-none items-center justify-center text-ink [&::-webkit-details-marker]:hidden"
           aria-label="Open section menu"
