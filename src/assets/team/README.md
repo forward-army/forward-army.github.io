@@ -1,11 +1,13 @@
 # Team portraits
 
-Replace temporary founder portraits with final 4:5 WebP files here:
+Final founder portraits live here as 4:5 WebP and are imported by src/pages/index.astro:
 
 - lukasz-augustyniak.webp
 - roman-bartusiak.webp
 - adrian-szymczak.webp
 
-Export every portrait at 800x1000 pixels or larger with consistent crop, lighting, and background. Keep faces centered with enough headroom for object-cover cropping.
-
-After adding files, change the three portrait imports in src/pages/index.astro from *-placeholder.svg to matching .webp. No markup/layout changes required.
+Current files were cut from 300-400px square headshots, so they are 240x300 and
+320x400 — below the 800x1000 target and soft on desktop and retina. To replace,
+export at 800x1000 or larger with consistent crop, lighting, and background, keep
+faces centered with headroom for object-cover cropping, and overwrite the file.
+No markup changes needed.
