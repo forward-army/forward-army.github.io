@@ -8,6 +8,7 @@ import Icon from '../components/Icon.astro';
 import lukaszPortrait from '../assets/team/lukasz-augustyniak.webp';
 import romanPortrait from '../assets/team/roman-bartusiak.webp';
 import adrianPortrait from '../assets/team/adrian-szymczak.webp';
+import { modes, terms } from '../data/engagement.js';
 
 const loop = [
   {
@@ -134,7 +135,11 @@ const faqs = [
   },
   {
     q: 'Do we need engineers to run this?',
-    a: 'No. Our engineers help you build and deploy it — you bring a real problem and a scope you are comfortable granting, and you decide what ships. The platform is built for any team, not just technical ones.',
+    a: 'No. Our engineers help you build and deploy it — you bring a real problem and a scope you are comfortable granting, and you decide what ships. The platform is built for any team, not just technical ones — and if you would rather not run it at all, Operate does that for you.',
+  },
+  {
+    q: 'What happens after the agent ships?',
+    a: 'Your call. Run it yourself — you keep the code, the evaluation set, and a runbook. Or put it on Operate, a flat monthly fee to keep it monitored, updated, and improving. Teams without an AI function can go further with Augment: a named engineer on retainer, Operate included.',
   },
 ];
 ---
@@ -369,12 +374,60 @@ const faqs = [
       </div>
     </section>
 
+    <!-- ========================== ENGAGEMENT ========================== -->
+    <section id="operate" aria-labelledby="operate-h" class="border-t border-[var(--edge)] bg-bone">
+      <div class="brief-shell py-24">
+        <div class="grid gap-x-16 gap-y-8 md:grid-cols-[1.1fr_1fr] md:items-end">
+          <div>
+            <span class="mono-label text-signal-deep">06 / Operate</span>
+            <h2 id="operate-h" class="mt-6 text-h2 text-ink">
+              We build it. You run it.<br />Or we run it for you.
+            </h2>
+          </div>
+          <p class="max-w-xl text-lead text-field">
+            An agent is not a project. It is a capability that needs an
+            operator. Choose how much of that operator you want to be.
+          </p>
+        </div>
+
+        <!-- Three modes as ruled rows (not identical cards) -->
+        <dl class="reveal mt-14 border-t border-[var(--edge-strong)]">
+          {modes.map((m) => (
+            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
+              <dt class="contents">
+                <span class="flex items-center gap-3">
+                  <span class="font-mono text-sm font-medium text-signal-deep">{m.idx}</span>
+                  <span class="mono-label text-field">{m.label}</span>
+                </span>
+                <span class="font-display text-h3 font-bold text-ink">{m.t}</span>
+              </dt>
+              <dd class="text-field">
+                <p>{m.d}</p>
+                {m.includes && (
+                  <ul class="mt-5 space-y-2.5">
+                    {m.includes.map((line) => (
+                      <li class="flex items-start gap-3">
+                        <Chevron count={1} strokeWidth={7} class="mt-1.5 h-3 w-auto shrink-0 text-field" />
+                        <span>{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <p class="reveal mt-8 max-w-xl text-sm text-field">{terms}</p>
+      </div>
+    </section>
+
     <!-- ============================ PEOPLE =========================== -->
     <section id="team" aria-labelledby="team-h" class="border-t border-[var(--edge)] bg-bone-sink">
       <div class="brief-shell py-24">
         <div class="grid gap-x-16 gap-y-8 md:grid-cols-[1.1fr_1fr] md:items-end">
           <div>
-            <span class="mono-label text-signal-deep">06 / Service record</span>
+            <span class="mono-label text-signal-deep">07 / Service record</span>
             <h2 id="team-h" class="mt-6 text-h2 text-ink">
               Not just agents.<br />The people who deploy them.
             </h2>
@@ -462,7 +515,7 @@ const faqs = [
       <div class="grid-ticks pointer-events-none absolute inset-0 opacity-50" aria-hidden="true"></div>
       <div class="brief-shell relative grid gap-x-16 gap-y-12 py-24 md:grid-cols-[0.85fr_1.15fr]">
         <div class="reveal md:sticky md:top-24 md:self-start">
-          <span class="mono-label text-signal">07 / Field questions</span>
+          <span class="mono-label text-signal">08 / Field questions</span>
           <h2 id="faq-h" class="mt-6 text-h2 text-chalk">
             The questions<br />worth asking first.
           </h2>
@@ -495,7 +548,7 @@ const faqs = [
     <section id="deploy" aria-labelledby="deploy-h" class="border-t border-[var(--edge)] bg-signal text-ink">
       <div class="brief-shell grid gap-x-16 gap-y-12 py-24 md:grid-cols-[1fr_1fr] md:items-start">
         <div class="md:pt-4">
-          <span class="mono-label text-ink">08 / Request access</span>
+          <span class="mono-label text-ink">09 / Request access</span>
           <h2 id="deploy-h" class="mt-6 text-h2 text-ink">
             Give one agent a<br />bounded piece of ground.
           </h2>
