@@ -393,10 +393,10 @@ const faqs = [
         <!-- Three modes as ruled rows (not identical cards) -->
         <dl class="reveal mt-14 border-t border-[var(--edge-strong)]">
           {modes.map((m) => (
-            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
+            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[9rem_1fr_1.1fr]">
               <dt class="contents">
                 <span class="flex items-center gap-3">
-                  <span class="font-mono text-sm font-medium text-signal-deep">{m.idx}</span>
+                  <span class="whitespace-nowrap font-mono text-sm font-medium text-signal-deep">{m.idx}</span>
                   <span class="mono-label text-field">{m.label}</span>
                 </span>
                 <span class="font-display text-h3 font-bold text-ink">{m.t}</span>
@@ -454,10 +454,10 @@ const faqs = [
 
         <dl class="mt-16 border-t border-[var(--edge-strong)]">
           {record.map((r) => (
-            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[8rem_1fr_1.1fr]">
+            <div class="grid items-baseline gap-x-8 gap-y-2 border-b border-[var(--edge)] py-7 md:grid-cols-[9rem_1fr_1.1fr]">
               <dt class="contents">
                 <span class="flex items-center gap-3">
-                  <span class="font-mono text-sm font-medium text-signal-deep">{r.idx}</span>
+                  <span class="whitespace-nowrap font-mono text-sm font-medium text-signal-deep">{r.idx}</span>
                   <span class="mono-label text-field">{r.label}</span>
                 </span>
                 <span class="font-display text-h3 font-bold text-ink">{r.t}</span>
