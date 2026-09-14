@@ -4,9 +4,8 @@
  * Augment: continuous Build with Operate included. Drives the homepage
  * "Operate" section.
  *
- * Commitments marked TODO are market-standard defaults, not confirmed terms.
- * Confirm before they ship: response time, monthly improvement, fee unit,
- * pass-through of model spend, notice period.
+ * Terms (response time, monthly improvement, per-agent pricing, model-spend
+ * pass-through, notice period) confirmed by the founders on 2026-09-14.
  */
 export const modes = [
   {
@@ -19,11 +18,11 @@ export const modes = [
     idx: 'E-02',
     label: 'Operate',
     t: 'A flat monthly fee. We keep it running.',
-    d: 'Agents drift when nobody watches them: providers change models, your systems change APIs, edge cases surface. Operate is the team that watches — and ships one scoped improvement a month, agreed with you.', // TODO confirm monthly improvement
+    d: 'Agents drift when nobody watches them: providers change models, your systems change APIs, edge cases surface. Operate is the team that watches — and ships one scoped improvement a month, agreed with you.',
     includes: [
       'Monitoring of agent behavior, accuracy, and token spend',
       'Model and provider updates, API migrations, bug fixes',
-      'Incident response, next business day', // TODO confirm
+      'Incident response, next business day',
       'Prompt and evaluation tuning against the set you approved',
       'A monthly report: what it did, what it cost, what changed',
     ],
@@ -36,6 +35,5 @@ export const modes = [
   },
 ];
 
-// TODO confirm fee unit, pass-through, and notice period before this ships.
 export const terms =
   'Priced per agent, per month; model and API spend passes through at cost. Operate works through the same scoped, revocable access as everything else, and every change still arrives as a PR or an approval. Month to month after the first quarter, thirty days’ notice.';
