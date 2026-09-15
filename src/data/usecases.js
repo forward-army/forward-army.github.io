@@ -26,6 +26,12 @@ export const usecaseGroups = [
         connects: ['GitHub Actions', 'CI', 'Slack', 'Jira'],
       },
       {
+        t: 'PR review queue',
+        lede: 'The risky PR reaches the reviewer first.',
+        body: 'It ranks open PRs by real risk, hands the reviewer a summary instead of a diff, and flags the ones going stale — and it checks agent-written PRs against their ticket before they reach review.',
+        connects: ['GitHub / GitLab', 'CI', 'Jira / Linear', 'Slack'],
+      },
+      {
         t: 'Ticket triage & resolution',
         lede: 'Every ticket, sorted and started.',
         body: 'It labels, routes, and de-duplicates incoming tickets, drafts resolutions or opens PRs for the ones it can handle, and escalates the rest to the right person with full context attached.',
