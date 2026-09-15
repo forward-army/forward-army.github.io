@@ -9,8 +9,8 @@ export const usecaseGroups = [
     items: [
       {
         t: 'Error-to-fix loop',
-        lede: 'From the error nobody read to the fix you approve.',
-        body: 'It reads every new error group, decides what is actionable and what is noise, finds the owner from your code history, and writes the ticket with the user scenario reconstructed — then opens the fix as a PR, watches the deploy, and closes the ticket. Off-the-shelf tools stop at the pull request; this one carries the loop to the end.',
+        lede: 'From unread error to a fix you approve.',
+        body: 'It separates real errors from noise, finds the owner from your code history, and writes the ticket with the user scenario reconstructed — then opens the fix as a PR you approve and closes the ticket once the deploy is clean.',
         connects: ['Sentry', 'Jira / Linear', 'GitHub', 'Slack'],
       },
       {
@@ -21,9 +21,9 @@ export const usecaseGroups = [
       },
       {
         t: 'CI guardian',
-        lede: 'The end of "just rerun it".',
-        body: 'It tells a flaky test from a real failure, retries only what deserves a retry, and quarantines the rest behind a PR with an owner and an expiry date. When main goes red it finds the commit that did it and proposes the revert or the fix before anyone opens the logs.',
-        connects: ['GitHub Actions / GitLab CI', 'Test reports', 'Slack', 'Jira'],
+        lede: 'Red builds, sorted before you look.',
+        body: 'It tells a flaky test from a real failure, retries only what deserves it, and quarantines the rest behind a PR with an owner and an expiry — and when main goes red, it names the commit and proposes the revert.',
+        connects: ['GitHub Actions', 'CI', 'Slack', 'Jira'],
       },
       {
         t: 'Ticket triage & resolution',
@@ -34,36 +34,30 @@ export const usecaseGroups = [
       {
         t: 'Incident first-responder',
         lede: 'Triage that starts the moment it pages.',
-        body: 'For the outage, not the daily error stream: connected to your alerting, logs, and runbooks, it reads the incident, posts a diagnosis and a proposed fix in Slack, and drafts the postmortem — then diffs what responders actually did against the runbook and opens the update as a PR.',
+        body: 'For the outage, not the daily error stream: connected to your alerting, logs, and runbooks, it reads the incident, posts a diagnosis and a proposed fix in Slack, and drafts the postmortem — with every corrective action waiting on your approval.',
         connects: ['PagerDuty', 'Datadog', 'Slack', 'GitHub'],
-      },
-      {
-        t: 'Dependency & security hygiene',
-        lede: 'Upgrades that arrive already green.',
-        body: 'It tracks your dependencies and CVEs, opens upgrade PRs with the test suite passing, and flags anything risky for a human sign-off before it goes anywhere near production.',
-        connects: ['GitHub', 'CVE feeds', 'CI', 'Slack'],
       },
     ],
   },
   {
-    group: 'Data & AI in production',
+    group: 'Data & AI',
     items: [
       {
         t: 'LLM release gate',
         lede: 'No prompt ships without passing its evals.',
-        body: 'Every PR that touches a prompt, a model version, or retrieval runs against your regression set and comes back annotated with what moved and what broke. It also tracks provider deprecation calendars, finds every call site, and prepares the migration behind a feature flag before the shutdown date.',
-        connects: ['GitHub', 'Eval platform', 'Feature flags', 'Slack'],
+        body: 'It runs every PR that touches a prompt, a model version, or retrieval against your regression set and annotates what moved and what broke — and when a provider sets a shutdown date, it prepares the migration behind a flag for your sign-off.',
+        connects: ['GitHub', 'Braintrust / Langfuse', 'LaunchDarkly', 'Slack'],
       },
       {
         t: 'AI cost & provider ops',
         lede: 'The invoice explains itself.',
-        body: 'It holds a token budget per feature, and when spend jumps it traces the jump to the job, key, or PR responsible instead of leaving you the monthly total. On a provider outage or a quiet quality drop it proposes the routing change with the cost it will incur, and applies it on your word.',
-        connects: ['LLM gateway', 'Billing APIs', 'PagerDuty', 'Slack'],
+        body: 'It holds a token budget per feature and traces a spend jump back to the job, key, or PR that caused it — and on a provider outage it proposes the routing change with the cost it will incur, applying it on your word.',
+        connects: ['OpenAI / Anthropic', 'LiteLLM', 'Slack', 'Jira'],
       },
       {
-        t: 'Data pipeline first-responder',
-        lede: 'Broken pipelines, triaged before the dashboard is wrong.',
-        body: 'It reads the failed run, works out the cause from lineage, and proposes the rerun or the scoped backfill. It watches upstream schemas for the rename that would silently fill your features with nulls, and drafts the patch as a PR — every write to the warehouse waits for a human.',
+        t: 'Data pipeline triage',
+        lede: 'Broken pipelines, caught before the dashboard is wrong.',
+        body: 'It reads the failed run, works out the cause from lineage, and proposes the rerun or the scoped backfill — and it watches upstream schemas for the rename that would quietly fill your features with nulls, with every write waiting on you.',
         connects: ['Airflow / dbt', 'Snowflake / BigQuery', 'GitHub', 'Slack'],
       },
     ],
@@ -73,15 +67,21 @@ export const usecaseGroups = [
     items: [
       {
         t: 'Access & secrets steward',
-        lede: 'Least privilege, granted in minutes and taken back on time.',
-        body: 'It turns an access request in Slack into the narrowest role that does the job, gets the owner to approve in-thread, provisions it with an expiry, and revokes it when that expires. It inventories certificates and keys, opens the rotation ticket ahead of the deadline, and asks before touching production.',
+        lede: 'Access that expires on its own.',
+        body: 'It turns an access request in Slack into the narrowest role that does the job, gets the owner to approve in-thread, and provisions it with an expiry — then inventories your certificates and keys and opens the rotation ticket before the deadline.',
         connects: ['Okta', 'AWS / GCP IAM', 'GitHub', 'Slack'],
       },
       {
         t: 'Security & compliance evidence',
-        lede: 'The review that used to take a month.',
-        body: 'It drafts security-review and questionnaire answers from your code, infrastructure, and previously approved reviews, showing what changed since the last sign-off instead of starting from a blank form. Control evidence is collected on a schedule, so the audit window is a review rather than a scramble.',
-        connects: ['Vanta / Drata', 'ServiceNow / Jira', 'GitHub', 'Slack'],
+        lede: 'Evidence collected before the audit asks.',
+        body: 'It drafts security-review and questionnaire answers from your code, infrastructure, and previously approved reviews, showing what changed since the last sign-off, and collects control evidence on a schedule — with your security lead signing before anything is sent.',
+        connects: ['Vanta / Drata', 'ServiceNow', 'GitHub', 'Slack'],
+      },
+      {
+        t: 'Dependency & security hygiene',
+        lede: 'Upgrades that arrive already green.',
+        body: 'It tracks your dependencies and CVEs, opens upgrade PRs with the test suite passing, and flags anything risky for a human sign-off before it goes anywhere near production.',
+        connects: ['GitHub', 'CVE feeds', 'CI', 'Slack'],
       },
     ],
   },
