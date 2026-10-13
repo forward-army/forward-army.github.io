@@ -4,7 +4,12 @@
 // to Astro, <image-slot> mapped to the founder photo/monogram pattern,
 // style-hover -> scoped CSS, plus responsive stacking. Departs from DESIGN.md by
 // explicit request; kept self-contained (own nav/footer) so the theme is isolated.
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import lukaszPortrait from '../assets/team/lukasz-augustyniak.webp';
+import romanPortrait from '../assets/team/roman-bartusiak.webp';
+import adrianPortrait from '../assets/team/adrian-szymczak.webp';
+import { modes, terms } from '../data/engagement.js';
 import '@fontsource-variable/space-grotesk';
 import '@fontsource-variable/ibm-plex-sans';
 import '@fontsource/ibm-plex-mono/400.css';
@@ -18,11 +23,10 @@ const title = 'forward.army — Custom AI agents that do real work. Under your c
 const description =
   'Each forward-deployed agent is engineered for one job, wired into your tools, run on your infrastructure — and nothing risky ships without your approval.';
 
-// photo: drop a portrait in public/team/<file> and set the path to replace the monogram.
 const founders = [
-  { name: 'Łukasz Augustyniak', role: 'CO-FOUNDER · NLP RESEARCH', photo: null, bio: 'NLP researcher focused on LLMs and AI for legal work. Published across sentiment analysis, aspect extraction, and speech-recognition evaluation.', scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/lukaszaugustyniak/' },
-  { name: 'Roman Bartusiak', role: 'CO-FOUNDER · ML ENGINEERING', photo: null, bio: 'ML engineer and researcher in NLP. Full-stack software professional with deep expertise in distributed systems and applied AI.', scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/romanbartusiak/' },
-  { name: 'Adrian Szymczak', role: 'CO-FOUNDER · AI ARCHITECTURE', photo: null, bio: 'AI solutions architect across LLMs, data science, and software engineering. Published on conversational-speech modeling and ASR-error robustness.', scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/adrianszymczak/' },
+  { name: 'Łukasz Augustyniak', role: 'CO-FOUNDER · NLP RESEARCH', photo: lukaszPortrait, bio: 'AI architect with a law degree — 14+ years putting NLP into production, from legal-intelligence RAG to speech analytics. Published at NeurIPS and ACL, and reviews for both.', scholar: 'https://scholar.google.com/citations?user=o3apDSYAAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/lukaszaugustyniak/' },
+  { name: 'Roman Bartusiak', role: 'CO-FOUNDER · ML ENGINEERING', photo: romanPortrait, bio: 'ML engineer and researcher in NLP and machine learning. Software engineer with deep expertise in distributed systems, large-scale data processing, and applied AI.', scholar: 'https://scholar.google.com/citations?user=mk68epwAAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/romanbartusiak/' },
+  { name: 'Adrian Szymczak', role: 'CO-FOUNDER · AI ARCHITECTURE', photo: adrianPortrait, bio: 'AI solutions architect across LLMs, data science, and software engineering. Published on conversational-speech modeling and ASR-error robustness.', scholar: 'https://scholar.google.com/citations?user=fNqZL_4AAAAJ&hl=en', linkedin: 'https://www.linkedin.com/in/adrianszymczak/' },
 ];
 
 const hows = [
@@ -37,7 +41,8 @@ const faqs = [
   { q: 'What can an agent actually touch?', a: 'Only what you grant. Every capability is explicitly scoped and bounded — the same badge-and-scope you’d give a trusted contractor.' },
   { q: 'How do I stop it?', a: 'One click. Revoke access and the agent is gone instantly — no cleanup, no residue.' },
   { q: 'Does our data ever leave our environment?', a: 'Not unless you want it to. Run everything on-premise and air-gapped, or in a dedicated isolated account — never shared.' },
-  { q: 'Do we need engineers to run this?', a: 'No. Our engineers help you build and deploy it. You bring a real problem and decide what ships.' },
+  { q: 'Do we need engineers to run this?', a: 'No. Our engineers help you build and deploy it. You bring a real problem and decide what ships — and if you would rather not run it at all, Operate does that for you.' },
+  { q: 'What happens after the agent ships?', a: 'Your call. Run it yourself — you keep the code, the evaluation set, and a runbook. Or put it on Operate, a flat monthly fee to keep it monitored, updated, and improving. Teams without an AI function can go further with Augment: a named engineer on retainer, Operate included.' },
 ];
 ---
 <Base title={title} description={description}>
@@ -50,6 +55,7 @@ const faqs = [
         <a href="#team" class="dsx-navlink" style="color: #9fb0a5;">Team</a>
         <a href="#loop" class="dsx-navlink" style="color: #9fb0a5;">The loop</a>
         <a href="#how" class="dsx-navlink" style="color: #9fb0a5;">How it works</a>
+        <a href="#operate" class="dsx-navlink" style="color: #9fb0a5;">Operate</a>
         <a href="#faq" class="dsx-navlink" style="color: #9fb0a5;">Questions</a>
       </div>
       <a href="#cta" class="dsx-navcta" style="background: #2f9e69; color: #08130c; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 14px;">Request access</a>
@@ -91,7 +97,7 @@ const faqs = [
       </div>
       <!-- STAT STRIP -->
       <div class="dsx-stat-strip" style="max-width: 1160px; margin: 64px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #26332b; border: 1px solid #26332b; border-radius: 10px; overflow: hidden;">
-        <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>820+</div><div style="font-size: 13px; color: #8a988f;">peer-reviewed citations</div></div>
+        <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>620+</div><div style="font-size: 13px; color: #8a988f;">peer-reviewed citations</div></div>
         <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>NeurIPS · ACL</div><div style="font-size: 13px; color: #8a988f;">published at top venues</div></div>
         <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>On-prem</div><div style="font-size: 13px; color: #8a988f;">up to fully air-gapped</div></div>
         <div style="background: #131e17; padding: 20px 24px;"><div style={`font-family: ${DISPLAY}; font-size: 26px; font-weight: 700;`}>1-click</div><div style="font-size: 13px; color: #8a988f;">revocable access</div></div>
@@ -104,14 +110,14 @@ const faqs = [
         <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>02 / The team</div>
         <div class="dsx-team-head" style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; margin-bottom: 48px;">
           <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0; text-wrap: balance;`}>Built by the people who wrote the research.</h2>
-          <p style="color: #9fb0a5; margin: 0;">Every agent is designed, governed, and backed by founders with careers at the frontier of NLP research and large-scale software — 820+ citations, publishing since 2014.</p>
+          <p style="color: #9fb0a5; margin: 0;">Every agent is designed, governed, and backed by founders with careers at the frontier of NLP research and large-scale software — 620+ citations, publishing since 2014.</p>
         </div>
         <div class="dsx-team-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
           {founders.map((f) => (
             <div class="dsx-teamcard" style="background: #131e17; border: 1px solid #26332b; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 18px;">
               <div style="width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: #0b110d; border: 1px solid #26332b; display: flex; align-items: center; justify-content: center; flex: none;">
                 {f.photo ? (
-                  <img src={f.photo} alt={`${f.name}, forward.army co-founder`} width="96" height="96" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1);" />
+                  <Image src={f.photo} alt={`${f.name}, forward.army co-founder`} width={96} height={96} densities={[1, 2]} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1);" />
                 ) : (
                   <span aria-hidden="true" style={`font-family: ${DISPLAY}; font-weight: 700; font-size: 26px; color: #4a5f53;`}>{f.name.split(' ').map((w) => w[0]).join('')}</span>
                 )}
@@ -226,10 +232,38 @@ const faqs = [
       </div>
     </section>
 
+    <!-- OPERATE -->
+    <section id="operate" class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24;">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>06 / Operate</div>
+        <div class="dsx-team-head" style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; margin-bottom: 48px;">
+          <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0; text-wrap: balance;`}>We build it. You run it. Or we run it for you.</h2>
+          <p style="color: #9fb0a5; margin: 0;">An agent is not a project. It is a capability that needs an operator. Choose how much of that operator you want to be.</p>
+        </div>
+        <div class="dsx-team-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          {modes.map((m) => (
+            <div style="background: #131e17; border: 1px solid #26332b; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+              <div style={`font-family: ${MONO}; font-size: 12px; color: #8fb8a2;`}>{m.idx} · {m.label.toUpperCase()}</div>
+              <h3 style={`font-family: ${DISPLAY}; font-size: 20px; margin: 0;`}>{m.t}</h3>
+              <p style="margin: 0; font-size: 14.5px; color: #9fb0a5;">{m.d}</p>
+              {m.includes && (
+                <ul style="margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px;">
+                  {m.includes.map((line) => (
+                    <li style="display: flex; gap: 10px;"><span style="color: #57c78f;">✓</span> {line}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+        <p style="color: #8a988f; font-size: 13.5px; max-width: 640px; margin: 28px 0 0;">{terms}</p>
+      </div>
+    </section>
+
     <!-- FAQ -->
     <section id="faq" class="dsx-pad" style="padding: 96px 40px; border-bottom: 1px solid #1f2c24;">
       <div style="max-width: 860px; margin: 0 auto;">
-        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>06 / Questions</div>
+        <div style={`font-family: ${MONO}; font-size: 12px; color: #57c78f; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;`}>07 / Questions</div>
         <h2 style={`font-family: ${DISPLAY}; font-size: 42px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 36px;`}>Asked before every deployment.</h2>
         <div style="display: flex; flex-direction: column;">
           {faqs.map((q) => (
@@ -259,6 +293,7 @@ const faqs = [
         <a href="#team" style="color: #6e8377;">Team</a>
         <a href="#loop" style="color: #6e8377;">The loop</a>
         <a href="#how" style="color: #6e8377;">How it works</a>
+        <a href="#operate" style="color: #6e8377;">Operate</a>
         <a href="/use-cases" style="color: #6e8377;">Use cases</a>
         <a href="/compare" style="color: #6e8377;">Compare</a>
       </div>

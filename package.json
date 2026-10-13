@@ -13,6 +13,7 @@
     "check": "astro check",
     "preview:ci": "astro preview --port 4321 --host",
     "test:a11y": "node scripts/a11y.mjs",
+    "og": "node scripts/og.mjs",
     "a11y": "start-server-and-test preview:ci http://localhost:4321 test:a11y",
     "test:lighthouse": "lhci autorun"
   },
