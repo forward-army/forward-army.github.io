@@ -49,6 +49,12 @@ export const usecaseGroups = [
     group: 'Data & AI',
     items: [
       {
+        t: 'Trace triage & eval drafting',
+        lede: 'Your failures, clustered into an eval set you approve.',
+        body: 'It reads your production traces, groups the failures into named modes instead of a list of complaints, and opens a PR of candidate cases with binary assertions — you label what counts as correct, and only what you approve becomes the set the release gate runs.',
+        connects: ['Braintrust / Langfuse', 'OpenTelemetry', 'GitHub', 'Slack'],
+      },
+      {
         t: 'LLM release gate',
         lede: 'No prompt ships without passing its evals.',
         body: 'It runs every PR that touches a prompt, a model version, or retrieval against your regression set and annotates what moved and what broke — and when a provider sets a shutdown date, it prepares the migration behind a flag for your sign-off.',
