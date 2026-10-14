@@ -278,10 +278,69 @@ const faqs = [
 
     <!-- CTA -->
     <section id="cta" class="dsx-pad" style="padding: 96px 40px; background: radial-gradient(700px 400px at 50% 120%, #16241c 0%, #0f1712 70%);">
-      <div style="max-width: 720px; margin: 0 auto; text-align: center;">
-        <h2 style={`font-family: ${DISPLAY}; font-size: 44px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 14px; text-wrap: balance;`}>Give one agent a bounded piece of ground.</h2>
-        <p style="color: #9fb0a5; margin: 0 0 32px;">Bring a real problem and a scope you’re comfortable granting. We help you build and deploy it — you decide what ships. Reply within one business day.</p>
-        <a href="mailto:command@forward.army" class="dsx-btn" style="display: inline-block; background: #2f9e69; color: #08130c; padding: 14px 32px; border-radius: 7px; font-weight: 600; font-size: 15px;">Request access</a>
+      <div class="dsx-cta-grid" style="max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+        <div>
+          <h2 style={`font-family: ${DISPLAY}; font-size: 44px; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 14px; text-wrap: balance;`}>Give one agent a bounded piece of ground.</h2>
+          <p style="color: #9fb0a5; margin: 0 0 24px;">Bring a real problem and a scope you’re comfortable granting. We help you build and deploy it — you decide what ships. Reply within one business day.</p>
+          <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; color: #e8eee9; font-size: 15px;">
+            {[
+              'No access is granted until you say so.',
+              'Everything the agent does is logged and reversible.',
+              'Reply within one business day.',
+            ].map((point) => (
+              <li style="display: flex; gap: 10px; align-items: baseline;"><span aria-hidden="true" style="color: #2f9e69;">›</span><span>{point}</span></li>
+            ))}
+          </ul>
+        </div>
+
+        <div id="request-form" style="scroll-margin-top: 80px; background: #131e17; border: 1px solid #26332b; border-radius: 10px; padding: 28px;">
+          <form id="access-form" novalidate style="display: grid; gap: 18px;">
+            <p style={`font-family: ${MONO}; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #9fb0a5; margin: 0;`}>Request access</p>
+
+            <div class="dsx-form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="f-name" style={`font-family: ${MONO}; font-size: 12px; color: #9fb0a5;`}>Name</label>
+                <input id="f-name" name="name" type="text" autocomplete="name" required class="dsx-input" placeholder="Jane Rivera" />
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="f-company" style={`font-family: ${MONO}; font-size: 12px; color: #9fb0a5;`}>Company</label>
+                <input id="f-company" name="company" type="text" autocomplete="organization" required class="dsx-input" placeholder="Acme Corp" />
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="f-email" style={`font-family: ${MONO}; font-size: 12px; color: #9fb0a5;`}>Work email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required class="dsx-input" placeholder="jane@acme.com" />
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="f-usecase" style={`font-family: ${MONO}; font-size: 12px; color: #9fb0a5;`}>What would you deploy an agent on?</label>
+              <textarea id="f-usecase" name="usecase" rows="3" required class="dsx-input" style="resize: vertical;" placeholder="One workflow, system, or question you'd start with."></textarea>
+            </div>
+
+            <!-- Honeypot: hidden from humans, catches bots -->
+            <div hidden aria-hidden="true">
+              <label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+            </div>
+
+            <button type="submit" class="dsx-btn dsx-submit" style="background: #2f9e69; color: #08130c; padding: 14px 28px; border-radius: 7px; border: 0; font-family: inherit; font-weight: 600; font-size: 15px; cursor: pointer; justify-self: start;">
+              <span data-label>Request access</span>
+            </button>
+          </form>
+
+          <!-- Live region: status, success, error -->
+          <p id="form-status" role="status" aria-live="polite" style="margin: 16px 0 0; font-size: 14px; color: #9fb0a5;"></p>
+
+          <div id="form-success" hidden style="border-left: 2px solid #2f9e69; padding-left: 18px;">
+            <p style={`font-family: ${DISPLAY}; font-size: 20px; font-weight: 700; color: #e8eee9; margin: 0;`}>Request received.</p>
+            <p style="margin: 8px 0 0; color: #9fb0a5;">
+              We'll reply within one business day with next steps. Nothing is
+              accessed until you grant it.
+            </p>
+          </div>
+
+          <p style="margin: 16px 0 0; font-size: 14px; color: #9fb0a5;">Prefer email? <a href="mailto:command@forward.army">command@forward.army</a></p>
+        </div>
       </div>
     </section>
     </main>
@@ -319,6 +378,12 @@ const faqs = [
     .dsx-navcta:hover { background: #3cb87c !important; color: #08130c !important; text-decoration: none; }
     .dsx-teamcard:hover { border-color: #3a4a40 !important; }
 
+    .dsx-input { width: 100%; box-sizing: border-box; background: #0b110d; color: #e8eee9; border: 1px solid #2b3a31; border-radius: 6px; padding: 11px 14px; font-family: inherit; font-size: 15px; }
+    .dsx-input::placeholder { color: #9fb0a5; opacity: 1; }
+    .dsx-input:focus-visible, .dsx-submit:focus-visible, #request-form a:focus-visible { outline: 2px solid #57c78f; outline-offset: 2px; }
+    .dsx-input:focus-visible { border-color: #57c78f; }
+    .dsx-submit:disabled { opacity: 0.7; cursor: default; }
+
     @media (prefers-reduced-motion: reduce) {
       .dsx-feed div, .dsx-blink { animation: none !important; }
     }
@@ -326,6 +391,7 @@ const faqs = [
     @media (max-width: 900px) {
       .dsx-hero-grid, .dsx-team-head, .dsx-cmd-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
       .dsx-team-grid, .dsx-loop { grid-template-columns: 1fr !important; }
+      .dsx-cta-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
       .dsx-arrow { display: none !important; }
       .dsx-how-row { grid-template-columns: 56px 1fr !important; gap: 6px 20px !important; }
       .dsx-faq-row { grid-template-columns: 1fr !important; gap: 8px !important; }
@@ -333,8 +399,62 @@ const faqs = [
     @media (max-width: 620px) {
       .dsx-stat-strip { grid-template-columns: 1fr 1fr !important; }
       .dsx-cmd-controls { grid-template-columns: 1fr !important; }
+      .dsx-form-row { grid-template-columns: 1fr !important; }
       .dsx-navlinks { display: none !important; }
       .dsx-pad { padding-left: 20px !important; padding-right: 20px !important; }
     }
   </style>
+
+  <script>
+    const form = document.getElementById('access-form') as HTMLFormElement | null;
+    const statusEl = document.getElementById('form-status');
+    const successEl = document.getElementById('form-success');
+    const ENDPOINT = '/api/request-access';
+    const FALLBACK = 'command@forward.army';
+
+    if (form && statusEl && successEl) {
+      const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+      const btnLabel = form.querySelector('[data-label]');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusEl.textContent = '';
+        statusEl.style.color = '#9fb0a5';
+
+        // Honeypot + native validity
+        if ((form.elements.namedItem('website') as HTMLInputElement)?.value) return;
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        btn.disabled = true;
+        if (btnLabel) btnLabel.textContent = 'Sending…';
+
+        try {
+          const res = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          if (!res.ok) throw new Error(String(res.status));
+          form.hidden = true;
+          successEl.hidden = false;
+          (successEl.querySelector('p') as HTMLElement)?.focus?.();
+        } catch (err) {
+          btn.disabled = false;
+          if (btnLabel) btnLabel.textContent = 'Request access';
+          statusEl.style.color = '#e8eee9';
+          statusEl.innerHTML =
+            'Could not send just now. Email us directly at ' +
+            '<a style="font-weight: 600; text-decoration: underline;" href="mailto:' +
+            FALLBACK +
+            '">' +
+            FALLBACK +
+            '</a>.';
+        }
+      });
+    }
+  </script>
 </Base>
